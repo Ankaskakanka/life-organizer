@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Organizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .card-hover { transition: box-shadow 0.15s ease, transform 0.15s ease; }
+    .card-hover:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-1px); }
+    input:focus, select:focus, textarea:focus { outline: none; }
+    .tab-active { background: #4F46E5; color: white; }
+    .tab-inactive { color: #6B7280; }
+    .tab-inactive:hover { color: #111827; background: #F3F4F6; }
+    .modal-scroll::-webkit-scrollbar { width: 6px; }
+    .modal-scroll::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
+    .modal-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+    .drag-over-before { box-shadow: 0 -3px 0 #4F46E5, 0 1px 4px rgba(0,0,0,0.05) !important; }
+    .drag-over-after  { box-shadow: 0  3px 0 #4F46E5, 0 1px 4px rgba(0,0,0,0.05) !important; }
+    .task-dragging    { opacity: 0.4 !important; }
+    .drag-handle      { cursor: grab; }
+    .drag-handle:active { cursor: grabbing; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<div id="autosave-banner"></div>
+<div id="app"></div>
+
+<script>
+// ==========================================================
+// APP DATA — CLAUDE EDITS THIS SECTION TO UPDATE YOUR TASKS
+// ==========================================================
+const APP_DATA = {
+  version: 18,
+  tasks: [
+    {
+      "id": "mnonn0gjdvzb",
+      "title": "Billing Screen in MyCludo",
+      "status": "todo",
+      "priority": "low",
+      "category": "Project Work",
+      "subcategory": "Vibe Coding",
+      "assignee": "",
+      "collaborators": "",
+      "jiraTicket": "",
+      "subtasks": [],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T13:28:16.915Z",
+      "updatedAt": "2026-04-07T13:28:16.915Z"
+    },
+    {
+      "id": "mnomhi2sa2o1",
+      "title": "Add CSV reports to all the tools",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Project Work",
+      "subcategory": "Vibe Coding",
+      "assignee": "",
+      "collaborators": "",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnomhq2ng3ce", "title": "Banners", "done": false},
+        {"id": "mnomhuknznbo", "title": "Page Rankings", "done": true},
+        {"id": "mnomhywy2it1", "title": "Canned Responses", "done": true},
+        {"id": "mnomi1vvuc5e", "title": "Quicklinks", "done": true},
+        {"id": "mnomi471bsyy", "title": "Synonyms", "done": true},
+        {"id": "mnomuna6act0", "title": "Boosings", "done": false},
+        {"id": "mnomvexygtmp", "title": "AI Chat: unanswered questions", "done": false},
+        {"id": "mnomwpw84rag", "title": "Device Data", "done": false},
+        {"id": "mnomwtdgjgdt", "title": "Geo Data", "done": false}
+      ],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T12:56:00.196Z",
+      "updatedAt": "2026-04-07T13:07:54.676Z"
+    },
+    {
+      "id": "mnolxj1eypte",
+      "title": "Create customer facing roadmap",
+      "status": "todo",
+      "priority": "high",
+      "category": "Day-to-day Product Work",
+      "subcategory": "AI Advancements",
+      "assignee": "",
+      "collaborators": "Fred",
+      "jiraTicket": "",
+      "subtasks": [],
+      "attachments": [
+        {"id": "mnolyye0vqoy", "name": "Projects", "url": "https://docs.google.com/spreadsheets/d/1wZjJQJndpttSLu9rSFh0g8QJuwwhkA7ysQJ13GbKsfA/edit?gid=1310894462#gid=1310894462"}
+      ],
+      "notes": "",
+      "createdAt": "2026-04-07T12:40:28.322Z",
+      "updatedAt": "2026-04-07T12:42:23.771Z"
+    },
+    {
+      "id": "mnolwp9p9v2l",
+      "title": "Create a Cludo internal roadmap",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Day-to-day Product Work",
+      "subcategory": "AI Advancements",
+      "assignee": "",
+      "collaborators": "",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnoma299012p", "title": "create a new clean spreadsheet that we can use as a backbone", "done": false}
+      ],
+      "attachments": [
+        {"id": "mnolz9peh6xm", "name": "Projects", "url": "https://docs.google.com/spreadsheets/d/1wZjJQJndpttSLu9rSFh0g8QJuwwhkA7ysQJ13GbKsfA/edit?gid=1310894462#gid=1310894462"}
+      ],
+      "notes": "",
+      "createdAt": "2026-04-07T12:39:49.741Z",
+      "updatedAt": "2026-04-07T12:50:13.101Z"
+    },
+    {
+      "id": "mnom7cosn6qj",
+      "title": "Feature request workflow",
+      "status": "delegate",
+      "priority": "low",
+      "category": "Day-to-day Product Work",
+      "subcategory": "AI Advancements",
+      "assignee": "Essi",
+      "collaborators": "Essi",
+      "jiraTicket": "",
+      "subtasks": [],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T12:48:06.652Z",
+      "updatedAt": "2026-04-07T12:54:57.247Z"
+    },
+    {
+      "id": "mnom4dn4qkdr",
+      "title": "AI Chat: adding citations",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Day-to-day Product Work",
+      "subcategory": "Support Work",
+      "assignee": "",
+      "collaborators": "Carla",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnom4t5v70vn", "title": "Backend: expose the property", "done": false}
+      ],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T12:45:47.920Z",
+      "updatedAt": "2026-04-07T12:46:08.035Z"
+    },
+    {
+      "id": "mnom1uc3szd1",
+      "title": "Search Topics Kick off",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Project Work",
+      "subcategory": "New Homepage",
+      "assignee": "",
+      "collaborators": "Victor, David",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnom2ocw83c7", "title": "Schedule meeting with David and Victor to go over concepts", "done": false},
+        {"id": "mnom2w4a7bpk", "title": "Specs for engineering team", "done": false},
+        {"id": "mnom33bcvhi2", "title": "Kick-off meeting", "done": false}
+      ],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T12:43:49.587Z",
+      "updatedAt": "2026-04-07T12:44:47.880Z"
+    },
+    {
+      "id": "mnoicql0kr32",
+      "title": "Multi Language Support for AI Products",
+      "status": "todo",
+      "priority": "high",
+      "category": "Project Work",
+      "subcategory": "Conversational Search",
+      "assignee": "",
+      "collaborators": "",
+      "jiraTicket": "CDT-7907",
+      "subtasks": [
+        {"id": "mnom8r1r6jlq", "title": "Review Iliyan research", "done": false},
+        {"id": "mnom8vo4isho", "title": "Test on real customers", "done": false},
+        {"id": "mnom96d8p1qi", "title": "Create specs for a proposed solution", "done": false}
+      ],
+      "attachments": [],
+      "notes": "Iliyan did the research part here: https://cludosearch.atlassian.net/browse/CDT-7907\n\n--- Iliyan's findings (CDT-7907) ---\n\nShort-term fix (already live): Improvements to the current E5-small model are deployed. They only work with the VectorSimilarity engine config, and require dropping the similarity coefficient from 0.9 → 0.8 or 0.82. Results improve but are still not perfect.\n\nRoot cause: E5-small model (384 dimensions) has limited multilingual support, especially for short/single-keyword queries in non-English languages (Polish, German, Spanish tested).\n\nProposed solution — GTE model (opt-in per customer):\n• GTE has 2x the vector dimensions of E5-small\n• Much better at multilingual queries\n• Also improves relevance for English-only queries\n• Cannot replace E5-small globally — would require re-indexing all customer indices (very time-consuming)\n\nImplementation approach: Add a customer-level config to select the embedding model. E5-small stays as the default; GTE can be enabled for specific customers (e.g. customer 3309).\n\nCost impact: Doubles vector search costs — from ~$1,000–1,500/month to ~$2,000–3,000/month (EU + US combined).\n\nPerformance note: GTE is slower than E5-small for indexing very large indices (e.g. Find Law). For small indices, no noticeable impact on search or indexing speed.\n\n⚠️ Decision needed: Iliyan is waiting for a go-ahead to put the GTE changes live.",
+      "createdAt": "2026-04-07T11:00:19.476Z",
+      "updatedAt": "2026-04-07T12:49:31.772Z"
+    },
+    {
+      "id": "mnolbmferl9g",
+      "title": "Review AI Summary in Experience Builder",
+      "status": "todo",
+      "priority": "high",
+      "category": "Project Work",
+      "subcategory": "AI Summary",
+      "assignee": "",
+      "collaborators": "Signe, Ionela",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnolc29xautu", "title": "Re-test the Rich inline template", "done": false},
+        {"id": "mnolc940ndkn", "title": "Prepare going live plan", "done": false},
+        {"id": "mnolfcm1c4ar", "title": "Prepare update for commercial team", "done": false}
+      ],
+      "attachments": [],
+      "notes": "",
+      "createdAt": "2026-04-07T12:23:26.282Z",
+      "updatedAt": "2026-04-07T12:26:20.185Z"
+    },
+    {
+      "id": "mnoky13n5j48",
+      "title": "Easy Win Sprints",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Day-to-day Product Work",
+      "subcategory": "Coordination Work",
+      "assignee": "",
+      "collaborators": "Essi",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnokyaztn5kh", "title": "Chose tasks to be worked on", "done": true},
+        {"id": "mnokyl73ftse", "title": "Find the date for the sprint", "done": false},
+        {"id": "mnokysxrd4j2", "title": "Add specs for all the tasks", "done": false},
+        {"id": "mnolg9v30ygb", "title": "Add 'filter empty searches' task to the list", "done": false}
+      ],
+      "attachments": [
+        {"id": "mnol7p9funqq", "name": "Feature Requests 2023-2026 Analysis", "url": "https://cludosearch.atlassian.net/wiki/spaces/PROD/pages/4518838294/Feature+Requests+2023-2026+Analysis"}
+      ],
+      "notes": "",
+      "createdAt": "2026-04-07T12:12:52.115Z",
+      "updatedAt": "2026-04-07T12:27:03.280Z"
+    },
+    {
+      "id": "mnoktuodovh9",
+      "title": "Conversational Search Positioning",
+      "status": "todo",
+      "priority": "medium",
+      "category": "Project Work",
+      "subcategory": "Conversational Search",
+      "assignee": "",
+      "collaborators": "",
+      "jiraTicket": "",
+      "subtasks": [
+        {"id": "mnoku5lgx1ca", "title": "Write a clear vision document for Conversational Search — not a roadmap, but the product story that guides every future decision.", "done": false},
+        {"id": "mnokubilwfhe", "title": "Document every known gap across both products — what's missing, broken, or repeatedly asked for by customers.", "done": false},
+        {"id": "mnokuhrfi9zy", "title": "Synthesise all legacy feedback, support patterns, customer comments, and Gong call insights into one document.", "done": false},
+        {"id": "mnokusnm1mlu", "title": "Scope all remaining open work - write problem statements and specs", "done": false}
+      ],
+      "attachments": [
+        {"id": "mnol6i1gn71s", "name": "AI Chat vs. AI Mode: What's the Difference?", "url": "https://cludosearch.atlassian.net/wiki/spaces/PROD/pages/4587061252/AI+Chat+vs.+AI+Mode+What+s+the+Difference"}
+      ],
+      "notes": "",
+      "createdAt": "2026-04-07T12:09:37.165Z",
+      "updatedAt": "2026-04-07T12:19:30.567Z"
+    }
+  ],
+  categories: {
+    "Project Work": [
+      "Banners",
+      "Conversational Search",
+      "New Homepage",
+      "Enterprise Search",
+      "AI Summary",
+      "Vibe Coding"
+    ],
+    "Day-to-day Product Work": [
+      "AI Advancements",
+      "Support Work",
+      "Coordination Work",
+      "Customer Help Work"
+    ]
+  },
+  pendingTasks: [
+    {
+      "id": "slack_board_apr14",
+      "title": "Provide input for board meeting slides",
+      "suggestedPriority": "high",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Coordination Work",
+      "sourceFrom": "David Babayan",
+      "sourceChannel": "#the-a-team",
+      "sourceDate": "Apr 7, 2026",
+      "sourceUrl": "https://cludo-search.slack.com/archives/C095TDKNS1E/p1775564972716319",
+      "context": "Board meeting on April 14. Input needed on: Maintenance/Feature work ratio, Agentic AI adoption & product velocity, Homepage progress/status, Conversational search progress/status."
+    },
+    {
+      "id": "slack_philip_ea",
+      "title": "Add Philip from Tower Hamlets to Ask Cludo early adopters list",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Project Work",
+      "suggestedSubcategory": "Conversational Search",
+      "sourceFrom": "Camilla",
+      "sourceChannel": "#proj-ask-cludo",
+      "sourceDate": "Mar 20, 2026",
+      "sourceUrl": "https://cludo-search.slack.com/archives/C0ADPRN1PD5/p1774008636261949",
+      "context": "\"Can you add Philip from Tower Hamlets to the list of early adopters? We just showed him a little preview and he loves it.\""
+    },
+    {
+      "id": "slack_wp_question",
+      "title": "Answer: Does WP plugin + ExpBuilder allow self-service?",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Support Work",
+      "sourceFrom": "David Babayan",
+      "sourceChannel": "#ask-product",
+      "sourceDate": "Mar 30, 2026",
+      "sourceUrl": "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774861129275979",
+      "context": "\"Does WP plug-in + Inline experience via ExpBuilder allow us to have self-service?\""
+    },
+    {
+      "id": "slack_jess_update",
+      "title": "Reply to Jess Palkert's pending update request",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Support Work",
+      "sourceFrom": "Jess Palkert",
+      "sourceChannel": "#ask-product",
+      "sourceDate": "Apr 2, 2026",
+      "sourceUrl": "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775158225455129",
+      "context": "\"Any update on this one?\" — Jess is waiting for a response on an open thread."
+    },
+    {
+      "id": "slack_ask_cludo_page",
+      "title": "Confirm correct Confluence location for Ask Cludo product page",
+      "suggestedPriority": "low",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Coordination Work",
+      "sourceFrom": "Nick",
+      "sourceChannel": "#proj-ask-cludo",
+      "sourceDate": "Mar 30, 2026",
+      "sourceUrl": "https://cludo-search.slack.com/archives/C0ADPRN1PD5/p1774874157198929",
+      "context": "\"I nested the 3 stakeholder pages under the product page — is that a good spot, or is there another area where the latest product validation/thinking/details live?\""
+    }
+  ],
+  dismissedIds: [],
+  jiraPendingTasks: [
+    {
+      "id": "jira_support297_wp",
+      "title": "Answer: Does WP plugin + ExpBuilder allow self-service?",
+      "issueKey": "SUPPORT-297",
+      "issueSummary": "Test and validate the WordPress plugin for functionality",
+      "sourceFrom": "David Babayan",
+      "sourceDate": "Mar 30, 2026",
+      "sourceUrl": "https://cludosearch.atlassian.net/browse/SUPPORT-297",
+      "context": "Does WP plug-in + Inline experience via ExpBuilder allows us to have self-service? (tagged @Anna Wojciechowska)",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Support Work"
+    }
+  ],
+  jiraDismissedIds: [],
+  confluencePendingTasks: [
+    {
+      "id": "conf_prd_margin_andras_insights",
+      "title": "Respond: Any insights on margin analysis approach?",
+      "pageId": "4486823972",
+      "pageTitle": "PRD: Margin Analysis of AI Products",
+      "sourceType": "comment_on_owned_page",
+      "sourceFrom": "Andras Aponyi",
+      "sourceDate": "Mar 3, 2026",
+      "sourceUrl": "https://cludosearch.atlassian.net/wiki/spaces/PROD/pages/4486823972/PRD+Margin+Analysis+of+AI+Products?focusedCommentId=4519231489",
+      "context": "@Anna Wojciechowska, got any insights on this?",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Support Work"
+    },
+    {
+      "id": "conf_prd_margin_andras_access",
+      "title": "Confirm: Has access been granted on PRD margin doc?",
+      "pageId": "4486823972",
+      "pageTitle": "PRD: Margin Analysis of AI Products",
+      "sourceType": "comment_on_owned_page",
+      "sourceFrom": "Andras Aponyi",
+      "sourceDate": "Mar 3, 2026",
+      "sourceUrl": "https://cludosearch.atlassian.net/wiki/spaces/PROD/pages/4486823972/PRD+Margin+Analysis+of+AI+Products?focusedCommentId=4519231494",
+      "context": "@Anna Wojciechowska, has the access been granted so this comment thread can be resolved?",
+      "suggestedPriority": "medium",
+      "suggestedCategory": "Day-to-day Product Work",
+      "suggestedSubcategory": "Support Work"
+    }
+  ],
+  confluenceDismissedIds: [],
+  calendarEvents: [],
+  focusedTaskIds: []
+};
+// ==========================================================
+// END APP DATA
+// ==========================================================
+
+// ── Config ──────────────────────────────────────────────
+
+const PRIORITY_CONFIG = {
+  urgent: { label: 'Urgent', dot: '#EF4444', bg: '#FEF2F2', text: '#DC2626', border: '#FECACA', emoji: '🔴' },
+  high:   { label: 'High',   dot: '#F97316', bg: '#FFF7ED', text: '#EA580C', border: '#FED7AA', emoji: '🟠' },
+  medium: { label: 'Medium', dot: '#EAB308', bg: '#FEFCE8', text: '#CA8A04', border: '#FDE68A', emoji: '🟡' },
+  low:    { label: 'Low',    dot: '#22C55E', bg: '#F0FDF4', text: '#16A34A', border: '#BBF7D0', emoji: '🟢' }
+};
+
+const STATUS_CONFIG = {
+  todo:       { label: 'To Do',       bg: '#F3F4F6', text: '#374151', border: '#E5E7EB', leftBorder: '#9CA3AF' },
+  inprogress: { label: 'In Progress', bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE', leftBorder: '#3B82F6' },
+  done:       { label: 'Done',        bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0', leftBorder: '#22C55E' },
+  delegate:   { label: 'Delegate',    bg: '#FAF5FF', text: '#7E22CE', border: '#E9D5FF', leftBorder: '#A855F7' }
+};
+
+// ── State ────────────────────────────────────────────────
+let state = {
+  tasks: [],
+  categories: {},
+  version: 0,
+  pendingTasks: [],
+  dismissedIds: [],
+  jiraPendingTasks: [],
+  jiraDismissedIds: [],
+  confluencePendingTasks: [],
+  confluenceDismissedIds: [],
+  filters: { status: 'all', category: 'all', subcategory: 'all', priority: 'all', search: '' },
+  expandedNotes: new Set(),
+  activeTab: 'work',
+  calendarEvents: [],
+  focusedTaskIds: []
+};
+
+// ── Storage ──────────────────────────────────────────────
+// localStorage keeps your tasks safe across refreshes.
+// When Claude updates the file (new APP_DATA.version), we merge:
+//   • Claude's updated tasks (by id) replace old ones
+//   • Tasks you added in the browser (not in the file) are preserved
+const LS_KEY = 'anna_tasks_store';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const stored = JSON.parse(raw);
+      if (stored.fileVersion === APP_DATA.version) {
+        // Same file version — use your saved working copy
+        state.tasks             = stored.tasks || [];
+        state.categories        = stored.categories || JSON.parse(JSON.stringify(APP_DATA.categories));
+        state.version           = stored.version || APP_DATA.version;
+        state.pendingTasks      = stored.pendingTasks || [];
+        state.dismissedIds      = stored.dismissedIds || APP_DATA.dismissedIds || [];
+        state.jiraPendingTasks        = stored.jiraPendingTasks || [];
+        state.jiraDismissedIds        = stored.jiraDismissedIds || APP_DATA.jiraDismissedIds || [];
+        state.confluencePendingTasks  = stored.confluencePendingTasks || [];
+        state.confluenceDismissedIds  = stored.confluenceDismissedIds || APP_DATA.confluenceDismissedIds || [];
+        state.focusedTaskIds          = stored.focusedTaskIds || [];
+        state.calendarEvents          = APP_DATA.calendarEvents || [];
+      } else {
+        // Claude updated the file — smart merge:
+        //   • Tasks only in file → use file version
+        //   • Tasks only in storage → keep (user added them)
+        //   • Tasks in both → file wins on content fields,
+        //     but PRESERVE user-managed fields (subtasks, attachments, status, etc.)
+        const fileTasks  = JSON.parse(JSON.stringify(APP_DATA.tasks));
+        const storedMap  = {};
+        (stored.tasks || []).forEach(t => { storedMap[t.id] = t; });
+        const fileIds    = new Set(fileTasks.map(t => t.id));
+        const merged     = fileTasks.map(ft => {
+          const st = storedMap[ft.id];
+          if (!st) return ft;
+          return {
+            ...ft,
+            status:        st.status        ?? ft.status,
+            assignee:      st.assignee      ?? ft.assignee,
+            collaborators: st.collaborators ?? ft.collaborators,
+            subtasks:      (st.subtasks    && st.subtasks.length)    ? st.subtasks    : (ft.subtasks    || []),
+            attachments:   (st.attachments && st.attachments.length) ? st.attachments : (ft.attachments || []),
+          };
+        });
+        const userExtras   = (stored.tasks || []).filter(t => !fileIds.has(t.id));
+        state.tasks        = [...merged, ...userExtras];
+        state.categories   = JSON.parse(JSON.stringify(APP_DATA.categories));
+        state.version      = APP_DATA.version;
+        // Merge dismissedIds first, THEN filter pendingTasks so approved/dismissed items never reappear
+        const merged_dismissed = [...new Set([...(APP_DATA.dismissedIds || []), ...(stored.dismissedIds || [])])];
+        state.dismissedIds    = merged_dismissed;
+        state.pendingTasks    = (APP_DATA.pendingTasks || []).filter(t => !merged_dismissed.includes(t.sourceUrl));
+        const merged_jira_dismissed = [...new Set([...(APP_DATA.jiraDismissedIds || []), ...(stored.jiraDismissedIds || [])])];
+        state.jiraDismissedIds    = merged_jira_dismissed;
+        state.jiraPendingTasks    = (APP_DATA.jiraPendingTasks || []).filter(t => !merged_jira_dismissed.includes(t.sourceUrl));
+        const merged_conf_dismissed = [...new Set([...(APP_DATA.confluenceDismissedIds || []), ...(stored.confluenceDismissedIds || [])])];
+        state.confluenceDismissedIds    = merged_conf_dismissed;
+        state.confluencePendingTasks    = (APP_DATA.confluencePendingTasks || []).filter(t => !merged_conf_dismissed.includes(t.sourceUrl));
+        state.focusedTaskIds            = stored.focusedTaskIds || [];
+        state.calendarEvents            = APP_DATA.calendarEvents || [];
+      }
+    } else {
+      state.tasks            = JSON.parse(JSON.stringify(APP_DATA.tasks));
+      state.categories       = JSON.parse(JSON.stringify(APP_DATA.categories));
+      state.version          = APP_DATA.version;
+      const _di  = APP_DATA.dismissedIds || [];
+      const _jdi = APP_DATA.jiraDismissedIds || [];
+      const _cdi = APP_DATA.confluenceDismissedIds || [];
+      state.dismissedIds           = JSON.parse(JSON.stringify(_di));
+      state.pendingTasks           = (APP_DATA.pendingTasks || []).filter(t => !_di.includes(t.sourceUrl));
+      state.jiraDismissedIds       = JSON.parse(JSON.stringify(_jdi));
+      state.jiraPendingTasks       = (APP_DATA.jiraPendingTasks || []).filter(t => !_jdi.includes(t.sourceUrl));
+      state.confluenceDismissedIds = JSON.parse(JSON.stringify(_cdi));
+      state.confluencePendingTasks = (APP_DATA.confluencePendingTasks || []).filter(t => !_cdi.includes(t.sourceUrl));
+      state.focusedTaskIds         = JSON.parse(JSON.stringify(APP_DATA.focusedTaskIds || []));
+      state.calendarEvents         = APP_DATA.calendarEvents || [];
+    }
+  } catch(e) {
+    state.tasks            = JSON.parse(JSON.stringify(APP_DATA.tasks));
+    state.categories       = JSON.parse(JSON.stringify(APP_DATA.categories));
+    state.version          = APP_DATA.version;
+    const _di  = APP_DATA.dismissedIds || [];
+    const _jdi = APP_DATA.jiraDismissedIds || [];
+    const _cdi = APP_DATA.confluenceDismissedIds || [];
+    state.dismissedIds           = JSON.parse(JSON.stringify(_di));
+    state.pendingTasks           = (APP_DATA.pendingTasks || []).filter(t => !_di.includes(t.sourceUrl));
+    state.jiraDismissedIds       = JSON.parse(JSON.stringify(_jdi));
+    state.jiraPendingTasks       = (APP_DATA.jiraPendingTasks || []).filter(t => !_jdi.includes(t.sourceUrl));
+    state.confluenceDismissedIds = JSON.parse(JSON.stringify(_cdi));
+    state.confluencePendingTasks = (APP_DATA.confluencePendingTasks || []).filter(t => !_cdi.includes(t.sourceUrl));
+    state.focusedTaskIds         = JSON.parse(JSON.stringify(APP_DATA.focusedTaskIds || []));
+    state.calendarEvents         = APP_DATA.calendarEvents || [];
+  }
+  saveState();
+}
+
+function saveState() {
+  localStorage.setItem(LS_KEY, JSON.stringify({
+    fileVersion:       APP_DATA.version,
+    version:           state.version,
+    tasks:             state.tasks,
+    categories:        state.categories,
+    pendingTasks:      state.pendingTasks,
+    dismissedIds:      state.dismissedIds,
+    jiraPendingTasks:        state.jiraPendingTasks,
+    jiraDismissedIds:        state.jiraDismissedIds,
+    confluencePendingTasks:  state.confluencePendingTasks,
+    confluenceDismissedIds:  state.confluenceDismissedIds,
+    focusedTaskIds:          state.focusedTaskIds
+  }));
+  scheduleAutoSave();
+}
+
+// ── Task CRUD ─────────────────────────────────────────────
+function addTask(data) {
+  const task = {
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    title: data.title || '',
+    status: data.status || 'todo',
+    priority: data.priority || 'medium',
+    category: data.category || '',
+    subcategory: data.subcategory || '',
+    assignee: data.assignee || '',
+    collaborators: data.collaborators || '',
+    jiraTicket: data.jiraTicket || '',
+    subtasks: data.subtasks || [],
+    attachments: data.attachments || [],
+    notes: data.notes || '',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  state.tasks.unshift(task);
+  saveState();
+  renderApp();
+}
+
+function updateTask(id, updates) {
+  const i = state.tasks.findIndex(t => t.id === id);
+  if (i !== -1) {
+    state.tasks[i] = { ...state.tasks[i], ...updates, updatedAt: new Date().toISOString() };
+    saveState();
+    renderApp();
+  }
+}
+
+function deleteTask(id) {
+  if (!confirm('Delete this task?')) return;
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  saveState();
+  renderApp();
+}
+
+// ── Subtask CRUD ──────────────────────────────────────────
+function addSubtask(taskId, title) {
+  const i = state.tasks.findIndex(t => t.id === taskId);
+  if (i === -1) return;
+  if (!state.tasks[i].subtasks) state.tasks[i].subtasks = [];
+  state.tasks[i].subtasks.push({
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    title,
+    done: false
+  });
+  state.tasks[i].updatedAt = new Date().toISOString();
+  saveState();
+  renderApp();
+}
+
+function toggleSubtask(taskId, subtaskId) {
+  const i = state.tasks.findIndex(t => t.id === taskId);
+  if (i === -1) return;
+  const si = (state.tasks[i].subtasks||[]).findIndex(s => s.id === subtaskId);
+  if (si === -1) return;
+  state.tasks[i].subtasks[si].done = !state.tasks[i].subtasks[si].done;
+  state.tasks[i].updatedAt = new Date().toISOString();
+  saveState();
+  renderApp();
+}
+
+function deleteSubtask(taskId, subtaskId) {
+  const i = state.tasks.findIndex(t => t.id === taskId);
+  if (i === -1) return;
+  state.tasks[i].subtasks = (state.tasks[i].subtasks||[]).filter(s => s.id !== subtaskId);
+  state.tasks[i].updatedAt = new Date().toISOString();
+  saveState();
+  renderApp();
+}
+
+function openSubtaskInput(taskId) {
+  const container = document.getElementById('subtask-add-' + taskId);
+  if (!container) return;
+  container.innerHTML = `
+    <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+      <input id="new-subtask-${taskId}" type="text" placeholder="Add a subtask…"
+        style="flex:1;border:1px solid #C7D2FE;border-radius:6px;padding:5px 9px;font-size:12.5px;color:#374151;"
+        onkeydown="if(event.key==='Enter'){confirmAddSubtask('${taskId}');}if(event.key==='Escape'){renderApp();}">
+      <button onclick="confirmAddSubtask('${taskId}')"
+        style="background:#4F46E5;color:white;border:none;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">Add</button>
+      <button onclick="renderApp()"
+        style="border:1px solid #E5E7EB;background:white;color:#6B7280;padding:5px 8px;border-radius:6px;font-size:12px;cursor:pointer;">✕</button>
+    </div>`;
+  document.getElementById('new-subtask-' + taskId)?.focus();
+}
+
+function confirmAddSubtask(taskId) {
+  const input = document.getElementById('new-subtask-' + taskId);
+  const title = input?.value.trim();
+  if (!title) { renderApp(); return; }
+  addSubtask(taskId, title);
+}
+
+// ── Render Subtasks ───────────────────────────────────────
+function renderSubtasks(t) {
+  const subs = t.subtasks || [];
+  const doneCount = subs.filter(s => s.done).length;
+  const pct = subs.length > 0 ? Math.round((doneCount / subs.length) * 100) : 0;
+  const barColor = pct === 100 ? '#22C55E' : '#4F46E5';
+
+  return `<div style="margin-top:10px;padding-top:10px;border-top:1px solid #F3F4F6;">
+      ${subs.length > 0 ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="flex:1;background:#F3F4F6;border-radius:999px;height:4px;overflow:hidden;">
+            <div style="width:${pct}%;height:100%;background:${barColor};border-radius:999px;transition:width 0.3s;"></div>
+          </div>
+          <span style="font-size:11px;color:#6B7280;white-space:nowrap;font-weight:500;">${doneCount}/${subs.length} done</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:6px;">
+          ${subs.map(s => `
+            <div style="display:flex;align-items:center;gap:8px;padding:2px 0;">
+              <input type="checkbox" ${s.done ? 'checked' : ''}
+                onchange="toggleSubtask('${t.id}','${s.id}')"
+                style="width:14px;height:14px;cursor:pointer;accent-color:#4F46E5;flex-shrink:0;">
+              <span style="font-size:13px;color:${s.done ? '#9CA3AF' : '#374151'};text-decoration:${s.done ? 'line-through' : 'none'};flex:1;line-height:1.4;">${h(s.title)}</span>
+              <button onclick="deleteSubtask('${t.id}','${s.id}')" title="Remove"
+                style="border:none;background:transparent;cursor:pointer;color:#E5E7EB;padding:1px 4px;font-size:16px;line-height:1;flex-shrink:0;"
+                onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#E5E7EB'">×</button>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      <div id="subtask-add-${t.id}">
+        <button onclick="openSubtaskInput('${t.id}')"
+          style="font-size:12px;color:#9CA3AF;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:4px;padding:1px 0;"
+          onmouseover="this.style.color='#4F46E5'" onmouseout="this.style.color='#9CA3AF'">
+          <span style="font-size:15px;line-height:1;font-weight:500;">+</span> Add subtask
+        </button>
+      </div>
+    </div>`;
+}
+
+function cycleStatus(id) {
+  const t = state.tasks.find(t => t.id === id);
+  if (!t) return;
+  const order = ['todo','inprogress','done','delegate'];
+  const next = order[(order.indexOf(t.status) + 1) % order.length];
+  updateTask(id, { status: next });
+}
+
+function toggleNotes(id) {
+  state.expandedNotes.has(id) ? state.expandedNotes.delete(id) : state.expandedNotes.add(id);
+  renderApp();
+}
+
+// ── Filters ───────────────────────────────────────────────
+function setFilter(key, value) {
+  state.filters[key] = value;
+  if (key === 'category') state.filters.subcategory = 'all';
+  renderApp();
+}
+
+function setTab(tab) {
+  state.activeTab = tab;
+  renderApp();
+}
+
+// ── Daily Focus ───────────────────────────────────────────
+function toggleFocusTask(id) {
+  if (state.focusedTaskIds.includes(id)) {
+    state.focusedTaskIds = state.focusedTaskIds.filter(x => x !== id);
+  } else {
+    state.focusedTaskIds = [id, ...state.focusedTaskIds];
+  }
+  saveState();
+  renderApp();
+}
+
+function syncCalendar() {
+  alert('Calendar sync in progress — Claude will fetch your Outlook events and reload this view.');
+}
+
+function renderDailyFocus() {
+  const today = new Date();
+  const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateStr = `${DAY_NAMES[today.getDay()]}, ${MONTH_NAMES[today.getMonth()]} ${today.getDate()}`;
+
+  const HOUR_H    = 30;   // px per hour
+  const START_H   = 9;    // 9 am
+  const END_H     = 17;   // 5 pm
+  const hours = Array.from({length: END_H - START_H}, (_, i) => START_H + i);
+
+  const nowDecimal = today.getHours() + today.getMinutes() / 60;
+  const nowTop = (nowDecimal >= START_H && nowDecimal <= END_H)
+    ? ((nowDecimal - START_H) / (END_H - START_H)) * ((END_H - START_H) * HOUR_H)
+    : -1;
+
+  function timeToTop(t) {
+    const [hh, mm] = t.split(':').map(Number);
+    return (hh + mm / 60 - START_H) * HOUR_H;
+  }
+  function timeDuration(s, e) {
+    const [sh, sm] = s.split(':').map(Number);
+    const [eh, em] = e.split(':').map(Number);
+    return Math.max(((eh + em / 60) - (sh + sm / 60)) * HOUR_H, 16);
+  }
+  function fmtHour(h) {
+    if (h === 12) return '12 PM';
+    return h < 12 ? h + ' AM' : (h - 12) + ' PM';
+  }
+
+  const EV_COLORS = {
+    meeting:  { bg: '#EEF2FF', border: '#6366F1', text: '#4338CA' },
+    focus:    { bg: '#F0FDF4', border: '#22C55E', text: '#15803D' },
+    deadline: { bg: '#FEF2F2', border: '#EF4444', text: '#DC2626' },
+    other:    { bg: '#F8FAFC', border: '#94A3B8', text: '#475569'  }
+  };
+
+  const calEvents   = state.calendarEvents || [];
+  const focusTasks  = state.focusedTaskIds.map(id => state.tasks.find(t => t.id === id)).filter(Boolean);
+  const available   = state.tasks.filter(t => t.status !== 'done' && !state.focusedTaskIds.includes(t.id));
+
+  return `
+  <div style="border-bottom:1px solid #E5E7EB;background:white;"><div style="max-width:900px;margin:0 auto;padding:10px 20px 12px;">
+
+    <!-- Day header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;font-weight:700;color:#111827;">📅 Daily Focus</span>
+        <span style="font-size:11px;color:#9CA3AF;">${dateStr}</span>
+      </div>
+      <button onclick="syncCalendar()" style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid #E5E7EB;background:white;color:#6B7280;font-size:11.5px;cursor:pointer;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Sync Outlook
+      </button>
+    </div>
+
+    <!-- Two-column layout -->
+    <div style="display:grid;grid-template-columns:1fr 250px;gap:10px;align-items:start;">
+
+      <!-- LEFT: Calendar timeline -->
+      <div style="background:white;border-radius:8px;border:1px solid #E5E7EB;overflow:hidden;">
+        <div style="padding:6px 12px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11.5px;font-weight:600;color:#374151;">🗓 Calendar</span>
+          ${calEvents.length === 0
+            ? `<span style="font-size:10px;color:#9CA3AF;">No events — click Sync Outlook</span>`
+            : `<span style="font-size:10px;color:#6366F1;background:#EEF2FF;padding:1px 6px;border-radius:4px;">${calEvents.length} events</span>`}
+        </div>
+        <!-- Time grid -->
+        <div style="position:relative;">
+          ${hours.map(h => `
+            <div style="display:flex;min-height:${HOUR_H}px;border-bottom:1px solid #F8FAFC;">
+              <div style="width:44px;flex-shrink:0;padding:3px 6px 0 0;font-size:9.5px;color:#9CA3AF;font-weight:500;text-align:right;user-select:none;">${fmtHour(h)}</div>
+              <div style="flex:1;border-left:1px solid #F3F4F6;"></div>
+            </div>`).join('')}
+
+          <!-- Current time indicator -->
+          ${nowTop >= 0 ? `
+            <div style="position:absolute;left:0;right:0;top:${nowTop}px;pointer-events:none;z-index:4;display:flex;align-items:center;">
+              <div style="width:44px;flex-shrink:0;"></div>
+              <div style="flex:1;height:2px;background:#EF4444;position:relative;">
+                <div style="width:6px;height:6px;background:#EF4444;border-radius:50%;position:absolute;left:-3px;top:-2px;"></div>
+              </div>
+            </div>` : ''}
+
+          <!-- Events -->
+          ${calEvents.map(ev => {
+            const c   = EV_COLORS[ev.type] || EV_COLORS.other;
+            const top = timeToTop(ev.start);
+            const ht  = timeDuration(ev.start, ev.end);
+            if (top < 0 || top > (END_H - START_H) * HOUR_H) return '';
+            return `
+              <div style="position:absolute;left:50px;right:6px;top:${top}px;height:${ht}px;background:${c.bg};border-left:3px solid ${c.border};border-radius:4px;padding:2px 6px;overflow:hidden;z-index:2;cursor:default;" title="${h(ev.title)}${ev.location ? ' · ' + ev.location : ''}">
+                <div style="font-size:11px;font-weight:600;color:${c.text};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h(ev.title)}</div>
+                ${ht > 22 ? `<div style="font-size:9.5px;color:${c.text};opacity:0.75;">${ev.start}–${ev.end}${ev.location ? ' · ' + h(ev.location) : ''}</div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- RIGHT: Focus panel -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+
+        <!-- Today's focus list -->
+        <div style="background:white;border-radius:8px;border:1px solid #E5E7EB;overflow:hidden;">
+          <div style="padding:6px 12px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:11.5px;font-weight:600;color:#374151;">🎯 Today's Focus</span>
+            <span style="font-size:10px;color:#9CA3AF;">${focusTasks.length} task${focusTasks.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div style="padding:6px 8px;">
+            ${focusTasks.length === 0
+              ? `<div style="text-align:center;padding:10px 8px;color:#9CA3AF;font-size:11px;">Pin tasks from below</div>`
+              : focusTasks.map(t => {
+                  const pr = PRIORITY_CONFIG[t.priority] || PRIORITY_CONFIG.medium;
+                  const st = STATUS_CONFIG[t.status]   || STATUS_CONFIG.todo;
+                  return `
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 7px;margin-bottom:3px;background:#FAFAFA;border-radius:6px;border-left:3px solid ${pr.dot};">
+                      <div style="flex:1;min-width:0;">
+                        <div style="font-size:11.5px;font-weight:600;color:#111827;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h(t.title)}</div>
+                        <span onclick="cycleStatus('${t.id}')" style="font-size:9.5px;font-weight:600;padding:1px 5px;border-radius:999px;cursor:pointer;background:${st.bg};color:${st.text};border:1px solid ${st.border};">${st.label}</span>
+                      </div>
+                      <button onclick="toggleFocusTask('${t.id}')" title="Remove" style="border:none;background:transparent;cursor:pointer;color:#D1D5DB;padding:1px;font-size:16px;line-height:1;flex-shrink:0;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#D1D5DB'">×</button>
+                    </div>`;
+                }).join('')}
+          </div>
+        </div>
+
+        <!-- Available tasks to add -->
+        <div style="background:white;border-radius:8px;border:1px solid #E5E7EB;overflow:hidden;">
+          <div style="padding:6px 12px;border-bottom:1px solid #F3F4F6;">
+            <span style="font-size:11.5px;font-weight:600;color:#374151;">Add from Work</span>
+          </div>
+          <div style="padding:4px 8px;max-height:160px;overflow-y:auto;">
+            ${available.length === 0
+              ? `<div style="text-align:center;padding:10px 8px;color:#9CA3AF;font-size:11px;">All tasks in focus!</div>`
+              : available.map(t => {
+                  const pr = PRIORITY_CONFIG[t.priority] || PRIORITY_CONFIG.medium;
+                  return `
+                    <div style="display:flex;align-items:center;gap:6px;padding:4px 4px;margin-bottom:2px;border-radius:5px;cursor:default;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                      <div style="width:6px;height:6px;border-radius:50%;background:${pr.dot};flex-shrink:0;"></div>
+                      <span style="flex:1;font-size:11.5px;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h(t.title)}</span>
+                      <button onclick="toggleFocusTask('${t.id}')" style="border:none;background:#EEF2FF;color:#4F46E5;cursor:pointer;padding:2px 6px;border-radius:5px;font-size:10.5px;font-weight:600;flex-shrink:0;white-space:nowrap;" onmouseover="this.style.background='#E0E7FF'" onmouseout="this.style.background='#EEF2FF'">+ Focus</button>
+                    </div>`;
+                }).join('')}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function getFilteredTasks() {
+  const f = state.filters;
+  return state.tasks.filter(t => {
+    if (f.status !== 'all' && t.status !== f.status) return false;
+    if (f.category !== 'all' && t.category !== f.category) return false;
+    if (f.subcategory !== 'all' && t.subcategory !== f.subcategory) return false;
+    if (f.priority !== 'all' && t.priority !== f.priority) return false;
+    if (f.search) {
+      const s = f.search.toLowerCase();
+      if (!t.title.toLowerCase().includes(s) && !(t.notes||'').toLowerCase().includes(s)) return false;
+    }
+    return true;
+  });
+}
+
+function sortTasks(tasks) {
+  const po = { urgent:0, high:1, medium:2, low:3 };
+  const so = { inprogress:0, todo:1, delegate:2, done:3 };
+  return [...tasks].sort((a,b) => {
+    if (a.status==='done' && b.status!=='done') return 1;
+    if (a.status!=='done' && b.status==='done') return -1;
+    const pd = (po[a.priority]||2) - (po[b.priority]||2);
+    if (pd !== 0) return pd;
+    return (so[a.status]||0) - (so[b.status]||0);
+  });
+}
+
+function getStats() {
+  return {
+    all: state.tasks.length,
+    todo: state.tasks.filter(t=>t.status==='todo').length,
+    inprogress: state.tasks.filter(t=>t.status==='inprogress').length,
+    done: state.tasks.filter(t=>t.status==='done').length,
+    delegate: state.tasks.filter(t=>t.status==='delegate').length
+  };
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function h(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function safeId(str) { return String(str||'').replace(/[^a-zA-Z0-9]/g,'_'); }
+
+// ── Jira helpers ─────────────────────────────────────────
+function jiraKey(ticket) {
+  if (!ticket) return '';
+  if (ticket.startsWith('http')) {
+    const m = ticket.match(/browse\/([A-Z]+-\d+)/i);
+    return m ? m[1].toUpperCase() : ticket.split('/').pop();
+  }
+  return ticket.toUpperCase();
+}
+function jiraUrl(ticket) {
+  if (!ticket) return '';
+  if (ticket.startsWith('http')) return ticket;
+  return `https://cludosearch.atlassian.net/browse/${ticket.toUpperCase()}`;
+}
+
+// ── Drag & Drop ───────────────────────────────────────────
+let _dragId       = null;
+let _dragOverId   = null;
+let _dragOverPos  = null; // 'before' | 'after'
+
+function dragStart(e, id) {
+  _dragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => {
+    const el = document.querySelector(`[data-task-id="${id}"]`);
+    if (el) el.classList.add('task-dragging');
+  }, 0);
+}
+
+function dragOver(e, id) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.querySelectorAll('.drag-over-before,.drag-over-after').forEach(el => {
+    el.classList.remove('drag-over-before','drag-over-after');
+  });
+  if (id === _dragId) return;
+  const el = document.querySelector(`[data-task-id="${id}"]`);
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  _dragOverId  = id;
+  _dragOverPos = e.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
+  el.classList.add(_dragOverPos === 'before' ? 'drag-over-before' : 'drag-over-after');
+}
+
+function drop(e, targetId) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.querySelectorAll('.drag-over-before,.drag-over-after').forEach(el => {
+    el.classList.remove('drag-over-before','drag-over-after');
+  });
+  if (!_dragId || _dragId === targetId) { dragEnd(); return; }
+
+  const fromIdx   = state.tasks.findIndex(t => t.id === _dragId);
+  const targetTask = state.tasks.find(t => t.id === targetId);
+  if (fromIdx === -1 || !targetTask) { dragEnd(); return; }
+
+  // If crossing into a different category or subcategory, adopt those values
+  if (state.tasks[fromIdx].category !== targetTask.category ||
+      state.tasks[fromIdx].subcategory !== targetTask.subcategory) {
+    state.tasks[fromIdx].category    = targetTask.category;
+    state.tasks[fromIdx].subcategory = targetTask.subcategory || '';
+  }
+  const [removed] = state.tasks.splice(fromIdx, 1);
+  const insertAt   = state.tasks.findIndex(t => t.id === targetId);
+  state.tasks.splice(_dragOverPos === 'after' ? insertAt + 1 : insertAt, 0, removed);
+
+  _dragId = null; _dragOverId = null; _dragOverPos = null;
+  saveState();
+  renderApp();
+}
+
+// Drop onto an empty category section (or section header)
+function dropOnSection(e, catName) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.querySelectorAll('.drag-over-before,.drag-over-after').forEach(el => {
+    el.classList.remove('drag-over-before','drag-over-after');
+  });
+  if (!_dragId) { dragEnd(); return; }
+  const fromIdx = state.tasks.findIndex(t => t.id === _dragId);
+  if (fromIdx === -1) { dragEnd(); return; }
+  state.tasks[fromIdx].category    = catName;
+  state.tasks[fromIdx].subcategory = '';
+  const [removed] = state.tasks.splice(fromIdx, 1);
+  // Insert after the last task currently in this category
+  let insertAt = state.tasks.length;
+  for (let i = state.tasks.length - 1; i >= 0; i--) {
+    if (state.tasks[i].category === catName) { insertAt = i + 1; break; }
+  }
+  state.tasks.splice(insertAt, 0, removed);
+  _dragId = null; _dragOverId = null; _dragOverPos = null;
+  saveState();
+  renderApp();
+}
+
+// Drop onto a subcategory section header or empty subcategory zone
+function dropOnSubsection(e, catName, subcatName) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.querySelectorAll('.drag-over-before,.drag-over-after').forEach(el => {
+    el.classList.remove('drag-over-before','drag-over-after');
+  });
+  if (!_dragId) { dragEnd(); return; }
+  const fromIdx = state.tasks.findIndex(t => t.id === _dragId);
+  if (fromIdx === -1) { dragEnd(); return; }
+  state.tasks[fromIdx].category    = catName;
+  state.tasks[fromIdx].subcategory = subcatName;
+  const [removed] = state.tasks.splice(fromIdx, 1);
+  // Insert after the last task in this exact subcategory
+  let insertAt = -1;
+  for (let i = state.tasks.length - 1; i >= 0; i--) {
+    if (state.tasks[i].category === catName && state.tasks[i].subcategory === subcatName) {
+      insertAt = i + 1; break;
+    }
+  }
+  // Fall back: insert after the last task in this category
+  if (insertAt === -1) {
+    for (let i = state.tasks.length - 1; i >= 0; i--) {
+      if (state.tasks[i].category === catName) { insertAt = i + 1; break; }
+    }
+  }
+  if (insertAt === -1) insertAt = state.tasks.length;
+  state.tasks.splice(insertAt, 0, removed);
+  _dragId = null; _dragOverId = null; _dragOverPos = null;
+  saveState();
+  renderApp();
+}
+
+function dragEnd() {
+  document.querySelectorAll('.task-dragging,.drag-over-before,.drag-over-after').forEach(el => {
+    el.classList.remove('task-dragging','drag-over-before','drag-over-after');
+  });
+  _dragId = null; _dragOverId = null; _dragOverPos = null;
+}
+
+// ── Category colours ──────────────────────────────────────
+const CAT_PALETTE = ['#6366F1','#8B5CF6','#EC4899','#14B8A6','#F59E0B','#EF4444','#10B981','#3B82F6'];
+function getCatColor(name) {
+  const idx = Object.keys(state.categories).indexOf(name);
+  return CAT_PALETTE[idx >= 0 ? idx % CAT_PALETTE.length : CAT_PALETTE.length - 1];
+}
+
+// ── Grouped task list (Category → Subcategory → Tasks) ────
+function renderGroupedTasks(tasks) {
+  if (state.tasks.length === 0) {
+    return `<div style="text-align:center;padding:60px 20px;">
+      <div style="font-size:3rem;margin-bottom:12px;">📝</div>
+      <p style="color:#6B7280;font-size:16px;font-weight:500;">No tasks yet</p>
+      <p style="color:#9CA3AF;font-size:13px;margin-top:4px;">Add your first task to get started!</p>
+      <button onclick="openAddModal()" style="margin-top:16px;background:#4F46E5;color:white;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Add First Task</button>
+    </div>`;
+  }
+
+  // Pull focused tasks to top; remove them from their category groups
+  const focusedInView = tasks.filter(t => state.focusedTaskIds.includes(t.id));
+  tasks = tasks.filter(t => !state.focusedTaskIds.includes(t.id));
+
+  const catKeys = Object.keys(state.categories);
+
+  // Build lookup: cat → subcat → [tasks] (preserving order from state.tasks via `tasks` array)
+  const grouped = {};
+  catKeys.forEach(c => {
+    grouped[c] = { __other__: [] };
+    (state.categories[c] || []).forEach(s => { grouped[c][s] = []; });
+  });
+  grouped['__none__'] = { __other__: [] };
+
+  tasks.forEach(t => {
+    const cat = (t.category && grouped[t.category] !== undefined) ? t.category : '__none__';
+    const bucket = grouped[cat];
+    const sub = (t.subcategory && bucket[t.subcategory] !== undefined) ? t.subcategory : '__other__';
+    bucket[sub].push(t);
+  });
+
+  let html = '';
+
+  // Daily Focus section — pinned tasks float to the top
+  if (focusedInView.length > 0) {
+    html += `
+    <div style="margin-bottom:36px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:7px 12px;border-radius:10px;background:#FFFBEB;cursor:default;">
+        <div style="width:4px;height:22px;background:#F59E0B;border-radius:999px;flex-shrink:0;"></div>
+        <span style="font-size:12.5px;font-weight:800;color:#111827;text-transform:uppercase;letter-spacing:0.07em;">⭐ Daily Focus</span>
+        <span style="font-size:11px;font-weight:700;color:white;background:#F59E0B;padding:1px 8px;border-radius:999px;">${focusedInView.length}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding-left:10px;border-left:3px solid #FDE68A;margin-left:8px;">
+        ${focusedInView.map(t => renderCard(t)).join('')}
+      </div>
+    </div>`;
+  }
+
+  catKeys.forEach(cat => {
+    if (state.filters.category !== 'all' && state.filters.category !== cat) return;
+    const color     = getCatColor(cat);
+    const catTasks  = tasks.filter(t => t.category === cat);
+    if (catTasks.length === 0) return; // hide categories with no tasks
+    const subcats   = state.categories[cat] || [];
+
+    html += `
+      <div style="margin-bottom:36px;">
+        <!-- Category header -->
+        <div ondragover="event.preventDefault()" ondrop="dropOnSection(event,'${h(cat)}')"
+          style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:7px 12px;border-radius:10px;background:${color}14;cursor:default;"
+          onmouseover="this.style.background='${color}22'" onmouseout="this.style.background='${color}14'">
+          <div style="width:4px;height:22px;background:${color};border-radius:999px;flex-shrink:0;"></div>
+          <span style="font-size:12.5px;font-weight:800;color:#111827;text-transform:uppercase;letter-spacing:0.07em;">${h(cat)}</span>
+          <span style="font-size:11px;font-weight:700;color:white;background:${color};padding:1px 8px;border-radius:999px;">${catTasks.length}</span>
+        </div>
+
+        <!-- Subcategory sections -->
+        <div style="display:flex;flex-direction:column;gap:16px;padding-left:10px;border-left:3px solid ${color}30;margin-left:8px;">`;
+
+    subcats.forEach(subcat => {
+      if (state.filters.subcategory !== 'all' && state.filters.subcategory !== subcat) return;
+      const subcatTasks = grouped[cat][subcat] || [];
+      if (subcatTasks.length === 0) return; // hide empty subcategories
+
+      html += `
+          <div>
+            <!-- Subcategory header -->
+            <div ondragover="event.preventDefault()" ondrop="dropOnSubsection(event,'${h(cat)}','${h(subcat)}')"
+              style="display:flex;align-items:center;gap:7px;margin-bottom:7px;padding:4px 8px;border-radius:7px;cursor:default;"
+              onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
+              <svg width="7" height="10" viewBox="0 0 7 10" style="flex-shrink:0;"><polygon points="0,0 7,5 0,10" fill="${color}" opacity="0.65"/></svg>
+              <span style="font-size:11.5px;font-weight:700;color:#4B5563;">${h(subcat)}</span>
+              <span style="font-size:10.5px;color:#9CA3AF;background:#F3F4F6;padding:0 5px;border-radius:999px;">${subcatTasks.length}</span>
+            </div>
+            ${subcatTasks.length === 0 ? `
+              <div ondragover="event.preventDefault()" ondrop="dropOnSubsection(event,'${h(cat)}','${h(subcat)}')"
+                style="background:white;border:1.5px dashed #E5E7EB;border-radius:10px;padding:12px 16px;text-align:center;color:#D1D5DB;font-size:12px;display:flex;align-items:center;justify-content:center;min-height:40px;margin-left:14px;">
+                Drop a task here
+              </div>
+            ` : `
+              <div style="display:flex;flex-direction:column;gap:8px;margin-left:14px;">
+                ${subcatTasks.map(t => renderCard(t)).join('')}
+              </div>
+            `}
+          </div>`;
+    });
+
+    // Tasks in this category with no recognised subcategory
+    const otherTasks = grouped[cat]['__other__'] || [];
+    if (otherTasks.length > 0 && state.filters.subcategory === 'all') {
+      html += `
+          <div>
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;padding:4px 8px;border-radius:7px;">
+              <svg width="7" height="10" viewBox="0 0 7 10"><polygon points="0,0 7,5 0,10" fill="#9CA3AF" opacity="0.65"/></svg>
+              <span style="font-size:11.5px;font-weight:700;color:#9CA3AF;">Other</span>
+              <span style="font-size:10.5px;color:#9CA3AF;background:#F3F4F6;padding:0 5px;border-radius:999px;">${otherTasks.length}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-left:14px;">
+              ${otherTasks.map(t => renderCard(t)).join('')}
+            </div>
+          </div>`;
+    }
+
+    html += `
+        </div>
+      </div>`;
+  });
+
+  // Uncategorized tasks (no category set)
+  const noneTasks = grouped['__none__']['__other__'] || [];
+  if (noneTasks.length > 0) {
+    html += `
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:7px 12px;border-radius:10px;background:#F9FAFB;">
+          <div style="width:4px;height:22px;background:#9CA3AF;border-radius:999px;flex-shrink:0;"></div>
+          <span style="font-size:12.5px;font-weight:800;color:#111827;text-transform:uppercase;letter-spacing:0.07em;">Uncategorized</span>
+          <span style="font-size:11px;font-weight:700;color:white;background:#9CA3AF;padding:1px 8px;border-radius:999px;">${noneTasks.length}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${noneTasks.map(t => renderCard(t)).join('')}
+        </div>
+      </div>`;
+  }
+
+  return html || `<div style="text-align:center;padding:40px;color:#9CA3AF;font-size:14px;">No tasks match your filters</div>`;
+}
+
+// ── Render App ────────────────────────────────────────────
+function renderApp() {
+  const stats = getStats();
+  const tasks = getFilteredTasks();
+  const cats = Object.keys(state.categories);
+  const subcats = state.filters.category !== 'all' ? (state.categories[state.filters.category]||[]) : [];
+
+  document.getElementById('app').innerHTML = `
+    <!-- HEADER -->
+    <header style="background:white; border-bottom:1px solid #E5E7EB;" class="sticky top-0 z-10 shadow-sm">
+      <div style="max-width:900px;" class="mx-auto px-5 py-3 flex items-center gap-3">
+        <span style="font-size:1.4rem">✅</span>
+        <h1 style="font-size:1.1rem; font-weight:700; color:#111827;">Life Organizer</h1>
+        <span style="font-size:10px;color:#9CA3AF;background:#F3F4F6;padding:2px 6px;border-radius:4px;">v${APP_DATA.version}</span>
+      </div>
+    </header>
+
+    <!-- TAB BAR -->
+    <div style="background:white;border-bottom:1px solid #E5E7EB;">
+      <div style="max-width:900px;" class="mx-auto px-5">
+        <div style="display:flex;gap:0;margin-bottom:-1px;">
+          <button onclick="setTab('work')" style="padding:12px 20px;font-size:14px;font-weight:${state.activeTab==='work'?'700':'500'};color:${state.activeTab==='work'?'#4F46E5':'#6B7280'};border:none;background:transparent;cursor:pointer;border-bottom:2px solid ${state.activeTab==='work'?'#4F46E5':'transparent'};">
+            💼 Work
+          </button>
+          <button onclick="setTab('personal')" style="padding:12px 20px;font-size:14px;font-weight:${state.activeTab==='personal'?'700':'500'};color:${state.activeTab==='personal'?'#4F46E5':'#6B7280'};border:none;background:transparent;cursor:pointer;border-bottom:2px solid ${state.activeTab==='personal'?'#4F46E5':'transparent'};">
+            🏠 Personal
+          </button>
+        </div>
+      </div>
+    </div>
+
+    ${state.activeTab === 'work' ? `
+    <!-- WORK TOOLBAR -->
+    <div style="background:white;border-bottom:1px solid #E5E7EB;">
+      <div style="max-width:900px;" class="mx-auto px-5 py-3 flex items-center justify-between gap-4 flex-wrap">
+        <div class="flex gap-1.5 flex-wrap items-center">
+          ${stats.inprogress>0?`<span style="background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.inprogress} In Progress</span>`:''}
+          ${stats.todo>0?`<span style="background:#F3F4F6;color:#374151;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.todo} To Do</span>`:''}
+          ${stats.delegate>0?`<span style="background:#FAF5FF;color:#7E22CE;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.delegate} Delegated</span>`:''}
+          ${stats.done>0?`<span style="background:#F0FDF4;color:#15803D;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.done} Done</span>`:''}
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <!-- Save status -->
+          <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#9CA3AF;margin-right:4px;">
+            <div id="saveStatusDot" style="width:7px;height:7px;border-radius:50%;background:#D1D5DB;"></div>
+            <span id="saveStatusLabel">—</span>
+          </div>
+          <button onclick="saveFile()" title="Save to file" style="color:#6B7280;font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid #E5E7EB;background:white;cursor:pointer;display:flex;align-items:center;gap:5px;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            Save
+          </button>
+          <button onclick="openSlackModal()" style="color:${state.pendingTasks.length > 0 ? '#4F46E5' : '#6B7280'};font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid ${state.pendingTasks.length > 0 ? '#C7D2FE' : '#E5E7EB'};background:${state.pendingTasks.length > 0 ? '#EEF2FF' : 'white'};cursor:pointer;display:flex;align-items:center;gap:5px;" onmouseover="this.style.background='${state.pendingTasks.length > 0 ? '#E0E7FF' : '#F9FAFB'}'" onmouseout="this.style.background='${state.pendingTasks.length > 0 ? '#EEF2FF' : 'white'}'">
+            💬 Slack${state.pendingTasks.length > 0 ? ` <span id="slackBadge" style="background:#EF4444;color:white;font-size:10px;font-weight:700;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;">${state.pendingTasks.length}</span>` : ''}
+          </button>
+          <button onclick="openJiraModal()" style="color:${state.jiraPendingTasks.length > 0 ? '#1D4ED8' : '#6B7280'};font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid ${state.jiraPendingTasks.length > 0 ? '#BFDBFE' : '#E5E7EB'};background:${state.jiraPendingTasks.length > 0 ? '#EFF6FF' : 'white'};cursor:pointer;display:flex;align-items:center;gap:5px;" onmouseover="this.style.background='${state.jiraPendingTasks.length > 0 ? '#DBEAFE' : '#F9FAFB'}'" onmouseout="this.style.background='${state.jiraPendingTasks.length > 0 ? '#EFF6FF' : 'white'}'">
+            🎯 Jira${state.jiraPendingTasks.length > 0 ? ` <span id="jiraBadge" style="background:#EF4444;color:white;font-size:10px;font-weight:700;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;">${state.jiraPendingTasks.length}</span>` : ''}
+          </button>
+          <button onclick="openConfluenceModal()" style="color:${state.confluencePendingTasks.length > 0 ? '#065F46' : '#6B7280'};font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid ${state.confluencePendingTasks.length > 0 ? '#6EE7B7' : '#E5E7EB'};background:${state.confluencePendingTasks.length > 0 ? '#ECFDF5' : 'white'};cursor:pointer;display:flex;align-items:center;gap:5px;" onmouseover="this.style.background='${state.confluencePendingTasks.length > 0 ? '#D1FAE5' : '#F9FAFB'}'" onmouseout="this.style.background='${state.confluencePendingTasks.length > 0 ? '#ECFDF5' : 'white'}'">
+            📄 Confluence${state.confluencePendingTasks.length > 0 ? ` <span id="confluenceBadge" style="background:#EF4444;color:white;font-size:10px;font-weight:700;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;">${state.confluencePendingTasks.length}</span>` : ''}
+          </button>
+          <button onclick="openSettings()" style="color:#6B7280;font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid #E5E7EB;background:white;cursor:pointer;display:flex;align-items:center;gap:5px;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+            Categories
+          </button>
+          <button onclick="openAddModal()" style="background:#4F46E5;color:white;font-size:13px;font-weight:600;padding:7px 16px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;">
+            <span style="font-size:16px;line-height:1">+</span> Add Task
+          </button>
+        </div>
+      </div>
+    </div>
+
+    ${renderDailyFocus()}
+
+    <!-- FILTERS -->
+    <div style="background:white;border-bottom:1px solid #E5E7EB;">
+      <div style="max-width:900px;" class="mx-auto px-5 py-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Search -->
+          <div style="position:relative;flex:1;min-width:200px;">
+            <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9CA3AF;" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
+            <input type="text" placeholder="Search tasks…" value="${h(state.filters.search)}" oninput="setFilter('search',this.value)"
+              style="width:100%;padding:7px 10px 7px 32px;border:1px solid #E5E7EB;border-radius:8px;font-size:13px;color:#374151;">
+          </div>
+          <!-- Category -->
+          <select onchange="setFilter('category',this.value)" style="border:1px solid #E5E7EB;border-radius:8px;padding:7px 10px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+            <option value="all">All Categories</option>
+            ${cats.map(c=>`<option value="${h(c)}" ${state.filters.category===c?'selected':''}>${h(c)}</option>`).join('')}
+          </select>
+          <!-- Subcategory -->
+          ${subcats.length>0?`<select onchange="setFilter('subcategory',this.value)" style="border:1px solid #E5E7EB;border-radius:8px;padding:7px 10px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+            <option value="all">All Types</option>
+            ${subcats.map(s=>`<option value="${h(s)}" ${state.filters.subcategory===s?'selected':''}>${h(s)}</option>`).join('')}
+          </select>`:''}
+          <!-- Priority -->
+          <select onchange="setFilter('priority',this.value)" style="border:1px solid #E5E7EB;border-radius:8px;padding:7px 10px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+            <option value="all">All Priorities</option>
+            <option value="urgent" ${state.filters.priority==='urgent'?'selected':''}>🔴 Urgent</option>
+            <option value="high" ${state.filters.priority==='high'?'selected':''}>🟠 High</option>
+            <option value="medium" ${state.filters.priority==='medium'?'selected':''}>🟡 Medium</option>
+            <option value="low" ${state.filters.priority==='low'?'selected':''}>🟢 Low</option>
+          </select>
+        </div>
+        <!-- Status tabs -->
+        <div class="flex gap-1 mt-3">
+          ${['all','todo','inprogress','done','delegate'].map(s => {
+            const labels = {all:'All',todo:'To Do',inprogress:'In Progress',done:'Done',delegate:'Delegate'};
+            const count = stats[s];
+            const active = state.filters.status === s;
+            return `<button onclick="setFilter('status','${s}')" style="padding:5px 12px;border-radius:999px;border:none;cursor:pointer;font-size:12.5px;font-weight:${active?'600':'500'};background:${active?'#4F46E5':'transparent'};color:${active?'white':'#6B7280'};" ${active?'':'onmouseover="this.style.background=\'#F3F4F6\'" onmouseout="this.style.background=\'transparent\'"'}>
+              ${labels[s]}${count>0?` <span style="background:${active?'rgba(255,255,255,0.25)':'#E5E7EB'};color:${active?'white':'#6B7280'};font-size:11px;padding:1px 6px;border-radius:999px;margin-left:2px;">${count}</span>`:''}
+            </button>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK LIST -->
+    <main style="max-width:900px;" class="mx-auto px-5 py-5">
+      ${renderGroupedTasks(tasks)}
+    </main>
+    ` : `
+    <main style="max-width:900px;" class="mx-auto px-5 py-5">
+      <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:3rem;margin-bottom:12px;">🏠</div>
+        <p style="color:#6B7280;font-size:16px;font-weight:500;">Personal tasks</p>
+        <p style="color:#9CA3AF;font-size:13px;margin-top:4px;">Coming soon — this is where your personal tasks will live.</p>
+      </div>
+    </main>
+    `}
+  `;
+}
+
+function renderCard(t) {
+  const pr = PRIORITY_CONFIG[t.priority] || PRIORITY_CONFIG.medium;
+  const st = STATUS_CONFIG[t.status] || STATUS_CONFIG.todo;
+  const isExp = state.expandedNotes.has(t.id);
+  const isDone = t.status === 'done';
+
+  return `
+    <div class="card-hover"
+      data-task-id="${t.id}"
+      draggable="true"
+      ondragstart="dragStart(event,'${t.id}')"
+      ondragover="dragOver(event,'${t.id}')"
+      ondrop="drop(event,'${t.id}')"
+      ondragend="dragEnd()"
+      style="background:white;border-radius:12px;border:1px solid #E5E7EB;border-left:4px solid ${pr.dot};box-shadow:0 1px 4px rgba(0,0,0,0.05);opacity:${isDone?'0.65':'1'};">
+      <div style="padding:14px 16px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <!-- Drag handle -->
+          <div class="drag-handle" style="display:flex;align-items:center;padding-top:3px;color:#D1D5DB;flex-shrink:0;" title="Drag to reorder">
+            <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor">
+              <circle cx="2.5" cy="2"  r="1.5"/><circle cx="7.5" cy="2"  r="1.5"/>
+              <circle cx="2.5" cy="7"  r="1.5"/><circle cx="7.5" cy="7"  r="1.5"/>
+              <circle cx="2.5" cy="12" r="1.5"/><circle cx="7.5" cy="12" r="1.5"/>
+            </svg>
+          </div>
+          <!-- Priority dot -->
+          <div style="width:10px;height:10px;border-radius:50%;background:${pr.dot};margin-top:5px;flex-shrink:0;"></div>
+
+          <!-- Content -->
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+              <h3 style="font-size:14px;font-weight:600;color:${isDone?'#9CA3AF':'#111827'};text-decoration:${isDone?'line-through':'none'};line-height:1.4;word-break:break-word;">${h(t.title)}</h3>
+              <!-- Status + actions -->
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <span onclick="cycleStatus('${t.id}')" title="Click to cycle status" style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;cursor:pointer;background:${st.bg};color:${st.text};border:1px solid ${st.border};white-space:nowrap;user-select:none;">${st.label}</span>
+                <button onclick="openEditModal('${t.id}')" title="Edit" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;padding:3px;border-radius:6px;display:flex;align-items:center;" onmouseover="this.style.color='#4F46E5';this.style.background='#EEF2FF'" onmouseout="this.style.color='#9CA3AF';this.style.background='transparent'">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </button>
+                <button onclick="deleteTask('${t.id}')" title="Delete" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;padding:3px;border-radius:6px;display:flex;align-items:center;" onmouseover="this.style.color='#EF4444';this.style.background='#FEF2F2'" onmouseout="this.style.color='#9CA3AF';this.style.background='transparent'">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tags row -->
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;">
+              ${t.category?`<span style="font-size:11px;font-weight:600;background:#EEF2FF;color:#4338CA;padding:2px 8px;border-radius:999px;">${h(t.category)}</span>`:''}
+              ${t.subcategory?`<span style="font-size:11px;color:#6366F1;background:#EEF2FF;border:1px solid #C7D2FE;padding:2px 8px;border-radius:4px;">↳ ${h(t.subcategory)}</span>`:''}
+              <span style="font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;background:${pr.bg};color:${pr.text};border:1px solid ${pr.border};">${pr.label}</span>
+              ${t.status==='delegate'&&t.assignee?`<span style="font-size:11px;background:#FAF5FF;color:#7E22CE;padding:2px 8px;border-radius:999px;border:1px solid #E9D5FF;">👤 ${h(t.assignee)}</span>`:''}
+              ${t.collaborators?(t.collaborators.split(',').map(n=>n.trim()).filter(Boolean).map(n=>`<span style="font-size:11px;background:#F0FDF4;color:#166534;padding:2px 8px;border-radius:999px;border:1px solid #BBF7D0;">🤝 ${h(n)}</span>`).join('')):''}
+              ${t.jiraTicket?`<a href="${h(jiraUrl(t.jiraTicket))}" target="_blank" rel="noopener" style="font-size:11px;background:#EFF6FF;color:#1D4ED8;padding:2px 8px;border-radius:4px;border:1px solid #BFDBFE;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:3px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="#1D4ED8"><path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.004-1.005zm5.723-5.756H5.757a5.215 5.215 0 0 0 5.214 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.021-1.001zM23.013 0H11.42a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0z"/></svg>
+                ${h(jiraKey(t.jiraTicket))}
+              </a>`:''}
+              ${(t.attachments||[]).map(a=>`
+                <a href="${h(a.url)}" target="_blank" rel="noopener"
+                  title="${h(a.url)}"
+                  style="font-size:11px;background:#F8FAFC;color:#374151;padding:2px 8px;border-radius:4px;border:1px solid #E5E7EB;text-decoration:none;display:inline-flex;align-items:center;gap:3px;max-width:140px;">
+                  <span style="flex-shrink:0;">📎</span>
+                  <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h(a.name)}</span>
+                </a>`).join('')}
+              ${t.notes?`<button onclick="toggleNotes('${t.id}')" style="font-size:11px;color:${isExp?'#4F46E5':'#9CA3AF'};background:${isExp?'#EEF2FF':'transparent'};border:none;cursor:pointer;padding:2px 8px;border-radius:4px;display:flex;align-items:center;gap:3px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                ${isExp?'Hide note':'View note'}
+              </button>`:''}
+            </div>
+
+            <!-- Notes expanded -->
+            ${t.notes && isExp ? `
+              <div style="margin-top:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:10px 12px;font-size:13px;color:#92400E;white-space:pre-wrap;line-height:1.5;">${h(t.notes)}</div>
+            ` : ''}
+
+            <!-- Subtasks -->
+            ${renderSubtasks(t)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Attachments (managed via modal) ──────────────────────
+let _pendingAttachments = [];
+
+function modalAddAttachment() {
+  const urlEl  = document.getElementById('f_attach_url');
+  const nameEl = document.getElementById('f_attach_name');
+  const url  = urlEl?.value.trim();
+  const name = nameEl?.value.trim();
+  if (!url) { urlEl?.focus(); return; }
+  _pendingAttachments.push({
+    id:   Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    name: name || url,
+    url
+  });
+  if (urlEl)  urlEl.value  = '';
+  if (nameEl) nameEl.value = '';
+  renderModalAttachments();
+  urlEl?.focus();
+}
+
+function modalRemoveAttachment(id) {
+  _pendingAttachments = _pendingAttachments.filter(a => a.id !== id);
+  renderModalAttachments();
+}
+
+function renderModalAttachments() {
+  const container = document.getElementById('f_attachments_list');
+  if (!container) return;
+  if (_pendingAttachments.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = _pendingAttachments.map(a => `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#F8FAFC;border-radius:7px;border:1px solid #E5E7EB;">
+      <span style="font-size:13px;flex-shrink:0;">📎</span>
+      <a href="${h(a.url)}" target="_blank" rel="noopener"
+        style="flex:1;font-size:12.5px;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none;"
+        title="${h(a.url)}">${h(a.name)}</a>
+      <button onclick="modalRemoveAttachment('${a.id}')"
+        style="border:none;background:transparent;cursor:pointer;color:#D1D5DB;font-size:16px;padding:0 2px;line-height:1;flex-shrink:0;"
+        onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#D1D5DB'">×</button>
+    </div>
+  `).join('');
+}
+
+// ── Add / Edit Modal ──────────────────────────────────────
+let _editingId = null;
+
+function openAddModal() {
+  _editingId = null;
+  _pendingAttachments = [];
+  showTaskModal(null);
+}
+
+function openEditModal(id) {
+  _editingId = id;
+  const task = state.tasks.find(t => t.id === id);
+  _pendingAttachments = JSON.parse(JSON.stringify(task?.attachments || []));
+  showTaskModal(task);
+}
+
+function closeModal(id) {
+  const el = document.getElementById(id||'taskModal');
+  if (el) el.remove();
+}
+
+function showTaskModal(task) {
+  const old = document.getElementById('taskModal');
+  if (old) old.remove();
+
+  const cats = Object.keys(state.categories);
+  const initCat = task?.category || '';
+  const initSubs = initCat ? (state.categories[initCat]||[]) : [];
+
+  const el = document.createElement('div');
+  el.id = 'taskModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;';
+  el.innerHTML = `
+    <div onclick="closeModal('taskModal')" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <div class="modal-scroll" style="position:relative;background:white;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.2);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;">
+      <div style="padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <h2 style="font-size:16px;font-weight:700;color:#111827;">${task?'Edit Task':'New Task'}</h2>
+          <button onclick="closeModal('taskModal')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;padding:4px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form id="taskForm" onsubmit="submitTaskForm(event)">
+          <!-- Title -->
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Task <span style="color:#EF4444">*</span></label>
+            <input id="f_title" type="text" required placeholder="What needs to be done?" value="${h(task?.title||'')}"
+              style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:14px;color:#111827;">
+          </div>
+
+          <!-- Status + Priority -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Status</label>
+              <select id="f_status" onchange="onModalStatusChange()" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+                <option value="todo" ${(!task||task.status==='todo')?'selected':''}>To Do</option>
+                <option value="inprogress" ${task?.status==='inprogress'?'selected':''}>In Progress</option>
+                <option value="done" ${task?.status==='done'?'selected':''}>Done</option>
+                <option value="delegate" ${task?.status==='delegate'?'selected':''}>Delegate</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Priority</label>
+              <select id="f_priority" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+                <option value="urgent" ${task?.priority==='urgent'?'selected':''}>🔴 Urgent</option>
+                <option value="high" ${task?.priority==='high'?'selected':''}>🟠 High</option>
+                <option value="medium" ${(!task||task.priority==='medium')?'selected':''}>🟡 Medium</option>
+                <option value="low" ${task?.priority==='low'?'selected':''}>🟢 Low</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Assignee (delegate only) -->
+          <div id="f_assigneeWrap" style="margin-bottom:14px;display:${task?.status==='delegate'?'block':'none'};">
+            <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">👤 Assign to</label>
+            <input id="f_assignee" type="text" placeholder="Person's name" value="${h(task?.assignee||'')}"
+              style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;">
+          </div>
+
+          <!-- Collaborators + Jira -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">🤝 Working with</label>
+              <input id="f_collaborators" type="text" placeholder="e.g. Iliyan, Maria" value="${h(task?.collaborators||'')}"
+                style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;">
+              <p style="font-size:11px;color:#9CA3AF;margin-top:4px;">Separate names with commas</p>
+            </div>
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">🎫 Jira Ticket</label>
+              <input id="f_jiraTicket" type="text" placeholder="e.g. CDT-7907" value="${h(task?.jiraTicket||'')}"
+                style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;">
+              <p style="font-size:11px;color:#9CA3AF;margin-top:4px;">Key or full URL — auto-links</p>
+            </div>
+          </div>
+
+          <!-- Attachments -->
+          <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:6px;">📎 Documents & Links</label>
+            <div id="f_attachments_list" style="display:flex;flex-direction:column;gap:5px;margin-bottom:7px;"></div>
+            <div style="display:flex;gap:6px;">
+              <input id="f_attach_url" type="url" placeholder="Paste a URL…"
+                style="flex:2;border:1px solid #E5E7EB;border-radius:7px;padding:7px 10px;font-size:12.5px;color:#374151;"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();modalAddAttachment();}">
+              <input id="f_attach_name" type="text" placeholder="Label (optional)"
+                style="flex:1;border:1px solid #E5E7EB;border-radius:7px;padding:7px 10px;font-size:12.5px;color:#374151;"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();modalAddAttachment();}">
+              <button onclick="modalAddAttachment()" type="button"
+                style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;border-radius:7px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;">+ Add</button>
+            </div>
+          </div>
+
+          <!-- Category + Sub -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Category</label>
+              <select id="f_category" onchange="onModalCatChange()" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+                <option value="">No category</option>
+                ${cats.map(c=>`<option value="${h(c)}" ${task?.category===c?'selected':''}>${h(c)}</option>`).join('')}
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Type / Project</label>
+              <select id="f_subcategory" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;background:white;cursor:pointer;">
+                <option value="">None</option>
+                ${initSubs.map(s=>`<option value="${h(s)}" ${task?.subcategory===s?'selected':''}>${h(s)}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:12.5px;font-weight:600;color:#374151;margin-bottom:5px;">Notes</label>
+            <textarea id="f_notes" rows="3" placeholder="Any additional notes or context…"
+              style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;resize:vertical;">${h(task?.notes||'')}</textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div style="display:flex;gap:10px;">
+            <button type="button" onclick="closeModal('taskModal')" style="flex:1;border:1px solid #E5E7EB;background:white;color:#374151;padding:9px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;">Cancel</button>
+            <button type="submit" style="flex:2;background:#4F46E5;color:white;border:none;padding:9px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">${task?'Save Changes':'Add Task'}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(el);
+  document.getElementById('f_title').focus();
+  renderModalAttachments();
+}
+
+function onModalStatusChange() {
+  const wrap = document.getElementById('f_assigneeWrap');
+  if (wrap) wrap.style.display = document.getElementById('f_status').value==='delegate' ? 'block' : 'none';
+}
+
+function onModalCatChange() {
+  const cat = document.getElementById('f_category')?.value;
+  const sub = document.getElementById('f_subcategory');
+  if (!sub) return;
+  const items = cat ? (state.categories[cat]||[]) : [];
+  sub.innerHTML = '<option value="">None</option>' + items.map(s=>`<option value="${h(s)}">${h(s)}</option>`).join('');
+}
+
+function submitTaskForm(e) {
+  e.preventDefault();
+  const status = document.getElementById('f_status').value;
+  const data = {
+    title: document.getElementById('f_title').value.trim(),
+    status,
+    priority: document.getElementById('f_priority').value,
+    category: document.getElementById('f_category').value,
+    subcategory: document.getElementById('f_subcategory').value,
+    assignee: status==='delegate' ? (document.getElementById('f_assignee')?.value.trim()||'') : '',
+    collaborators: document.getElementById('f_collaborators').value.trim(),
+    jiraTicket: document.getElementById('f_jiraTicket').value.trim(),
+    attachments: _pendingAttachments || [],
+    notes: document.getElementById('f_notes').value.trim()
+  };
+  if (!data.title) return;
+  if (_editingId) updateTask(_editingId, data);
+  else addTask(data);
+  closeModal('taskModal');
+}
+
+// ── Settings Modal ────────────────────────────────────────
+function openSettings() {
+  const old = document.getElementById('settingsModal');
+  if (old) old.remove();
+
+  const el = document.createElement('div');
+  el.id = 'settingsModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;';
+  el.innerHTML = `
+    <div onclick="closeModal('settingsModal')" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <div class="modal-scroll" style="position:relative;background:white;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.2);width:100%;max-width:520px;max-height:85vh;overflow-y:auto;">
+      <div style="padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <h2 style="font-size:16px;font-weight:700;color:#111827;">Manage Categories</h2>
+          <button onclick="closeModal('settingsModal')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          ${Object.entries(state.categories).map(([cat, items]) => `
+            <div style="background:#F8FAFC;border:1px solid #E5E7EB;border-radius:12px;padding:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <span style="font-size:13px;font-weight:700;color:#111827;">${h(cat)}</span>
+                <button onclick="deleteCategory('${h(cat)}')" style="font-size:11px;color:#EF4444;border:none;background:transparent;cursor:pointer;">Delete category</button>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+                ${items.map(item=>`
+                  <span style="background:white;border:1px solid #E5E7EB;color:#374151;font-size:12px;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;">
+                    ${h(item)}
+                    <button onclick="deleteSubcat('${h(cat)}','${h(item)}')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;font-size:14px;line-height:1;padding:0;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#9CA3AF'">×</button>
+                  </span>
+                `).join('')}
+              </div>
+              <div style="display:flex;gap:6px;">
+                <input id="newSub_${safeId(cat)}" type="text" placeholder="Add type / project…"
+                  style="flex:1;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px;font-size:12.5px;color:#374151;background:white;"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();addSubcat('${h(cat)}');}">
+                <button onclick="addSubcat('${h(cat)}')" style="background:#EEF2FF;color:#4F46E5;border:1px solid #C7D2FE;border-radius:6px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;">Add</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid #E5E7EB;">
+          <p style="font-size:12.5px;font-weight:700;color:#374151;margin-bottom:8px;">Add New Category</p>
+          <div style="display:flex;gap:8px;">
+            <input id="newCatInput" type="text" placeholder="Category name…"
+              style="flex:1;border:1px solid #E5E7EB;border-radius:8px;padding:8px 12px;font-size:13px;color:#374151;"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();addCategory();}">
+            <button onclick="addCategory()" style="background:#4F46E5;color:white;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(el);
+}
+
+function addCategory() {
+  const input = document.getElementById('newCatInput');
+  const name = input?.value.trim();
+  if (!name || state.categories[name]) return;
+  state.categories[name] = [];
+  saveState();
+  openSettings();
+}
+
+function deleteCategory(cat) {
+  if (!confirm(`Delete category "${cat}"? Tasks using it won't be deleted.`)) return;
+  delete state.categories[cat];
+  saveState();
+  openSettings();
+  renderApp();
+}
+
+function addSubcat(cat) {
+  const input = document.getElementById('newSub_' + safeId(cat));
+  const name = input?.value.trim();
+  if (!name || !state.categories[cat]) return;
+  if (!state.categories[cat].includes(name)) {
+    state.categories[cat].push(name);
+    saveState();
+  }
+  openSettings();
+}
+
+function deleteSubcat(cat, sub) {
+  if (!state.categories[cat]) return;
+  state.categories[cat] = state.categories[cat].filter(s=>s!==sub);
+  saveState();
+  openSettings();
+}
+
+// ── Sync Modal ────────────────────────────────────────────
+function openSync() {
+  const old = document.getElementById('syncModal');
+  if (old) old.remove();
+
+  const exportData = JSON.stringify({ version: state.version, tasks: state.tasks, categories: state.categories }, null, 2);
+
+  const el = document.createElement('div');
+  el.id = 'syncModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;';
+  el.innerHTML = `
+    <div onclick="closeModal('syncModal')" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <div class="modal-scroll" style="position:relative;background:white;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.2);width:100%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;">
+      <div style="padding:24px 24px 0;flex-shrink:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <h2 style="font-size:16px;font-weight:700;color:#111827;">Sync with Claude</h2>
+          <button onclick="closeModal('syncModal')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <p style="font-size:12.5px;color:#6B7280;margin-bottom:16px;">Copy your current data to share with Claude, or paste Claude's updated data to import it.</p>
+      </div>
+      <div class="modal-scroll" style="padding:0 24px 24px;overflow-y:auto;flex:1;">
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <label style="font-size:12.5px;font-weight:700;color:#374151;">📤 Your current data</label>
+            <button id="copyBtn" onclick="copySync()" style="font-size:12px;color:#4F46E5;border:none;background:transparent;cursor:pointer;font-weight:600;">Copy all</button>
+          </div>
+          <textarea id="syncExport" readonly style="width:100%;height:160px;border:1px solid #E5E7EB;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;color:#374151;background:#F8FAFC;resize:none;">${h(exportData)}</textarea>
+        </div>
+        <div>
+          <label style="display:block;font-size:12.5px;font-weight:700;color:#374151;margin-bottom:6px;">📥 Import from Claude</label>
+          <textarea id="syncImport" placeholder="Paste Claude's updated JSON here…" style="width:100%;height:120px;border:1px solid #E5E7EB;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;color:#374151;resize:none;"></textarea>
+          <button onclick="importSync()" style="margin-top:8px;width:100%;background:#4F46E5;color:white;border:none;padding:9px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Import & Apply</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(el);
+}
+
+function copySync() {
+  const ta = document.getElementById('syncExport');
+  if (!ta) return;
+  navigator.clipboard.writeText(ta.value).then(() => {
+    const btn = document.getElementById('copyBtn');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(()=>btn.textContent='Copy all',2000); }
+  }).catch(() => { ta.select(); document.execCommand('copy'); });
+}
+
+function importSync() {
+  const raw = document.getElementById('syncImport')?.value.trim();
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if (!Array.isArray(data.tasks)) { alert('Invalid format — expected { tasks: [...] }'); return; }
+    state.tasks = data.tasks;
+    state.version = (data.version || state.version) + 1;
+    if (data.categories) state.categories = data.categories;
+    saveState();
+    closeModal('syncModal');
+    renderApp();
+  } catch(e) {
+    alert('Could not parse JSON. Please double-check the data.');
+  }
+}
+
+// ── Slack Pending Tasks ────────────────────────────────────
+function approvePending(id) {
+  const p = state.pendingTasks.find(t => t.id === id);
+  if (!p) return;
+  // Mark as handled so it never reappears after a version bump
+  if (p.sourceUrl && !state.dismissedIds.includes(p.sourceUrl)) {
+    state.dismissedIds.push(p.sourceUrl);
+  }
+  addTask({
+    title:       p.title,
+    status:      'todo',
+    priority:    p.suggestedPriority || 'medium',
+    category:    p.suggestedCategory || '',
+    subcategory: p.suggestedSubcategory || '',
+    notes:       'From Slack — ' + p.sourceFrom + ' in ' + p.sourceChannel + ' (' + p.sourceDate + ')\n\n' + p.context,
+    attachments: p.sourceUrl ? [{ id: Date.now().toString(36) + Math.random().toString(36).substr(2,4), name: '\uD83D\uDCAC Slack: ' + p.sourceChannel + ' \u2014 ' + p.sourceFrom, url: p.sourceUrl }] : []
+  });
+  state.pendingTasks = state.pendingTasks.filter(t => t.id !== id);
+  saveState();
+  const modal = document.getElementById('slackModal');
+  if (modal) {
+    const list = document.getElementById('slackPendingList');
+    if (list) renderSlackPendingList(list);
+    const badge = modal.querySelector('#slackModalBadge');
+    if (badge) badge.textContent = state.pendingTasks.length;
+  }
+  renderApp();
+}
+
+function dismissPending(id) {
+  const task = state.pendingTasks.find(t => t.id === id);
+  if (task && task.sourceUrl && !state.dismissedIds.includes(task.sourceUrl)) {
+    state.dismissedIds.push(task.sourceUrl);
+  }
+  state.pendingTasks = state.pendingTasks.filter(t => t.id !== id);
+  saveState();
+  const list = document.getElementById('slackPendingList');
+  if (list) renderSlackPendingList(list);
+  renderApp();
+}
+
+function renderSlackPendingList(container) {
+  const prioColors = { urgent:'#DC2626', high:'#EA580C', medium:'#CA8A04', low:'#16A34A' };
+  if (state.pendingTasks.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:32px 20px 24px;">
+      <div style="font-size:2rem;margin-bottom:10px;">✅</div>
+      <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px;">All caught up — no pending items</div>
+      <div style="font-size:13px;color:#6B7280;line-height:1.6;margin-bottom:20px;">Threads you've already replied to are excluded automatically.<br>The next auto-sync runs at <strong>16:00 CET</strong>.<br>To sync right now, just ask Claude:</div>
+      <div style="background:#F3F4F6;border-radius:10px;padding:12px 16px;font-size:13px;color:#374151;font-style:italic;border:1px solid #E5E7EB;">
+        "Sync Slack into my tasks"
+      </div>
+    </div>`;
+    return;
+  }
+  container.innerHTML = state.pendingTasks.map(p => `
+    <div style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;margin-bottom:12px;background:white;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px;line-height:1.4;">${h(p.title)}</div>
+          <div style="font-size:12px;color:#6B7280;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="background:#F3F4F6;padding:2px 7px;border-radius:4px;font-weight:500;">
+              <a href="${p.sourceUrl}" target="_blank" style="color:#4F46E5;text-decoration:none;">${h(p.sourceChannel)}</a>
+            </span>
+            <span>from <strong>${h(p.sourceFrom)}</strong></span>
+            <span style="color:#9CA3AF;">${h(p.sourceDate)}</span>
+          </div>
+          <div style="font-size:12.5px;color:#374151;background:#F9FAFB;border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;font-style:italic;">${h(p.context)}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;color:${prioColors[p.suggestedPriority]||'#CA8A04'};background:#F9FAFB;border:1px solid #E5E7EB;padding:2px 7px;border-radius:4px;font-weight:600;">${(p.suggestedPriority||'medium').charAt(0).toUpperCase()+(p.suggestedPriority||'medium').slice(1)}</span>
+            <span style="font-size:11px;color:#6B7280;background:#F9FAFB;border:1px solid #E5E7EB;padding:2px 7px;border-radius:4px;">${h(p.suggestedCategory)}</span>
+            ${p.suggestedSubcategory ? `<span style="font-size:11px;color:#6B7280;background:#F9FAFB;border:1px solid #E5E7EB;padding:2px 7px;border-radius:4px;">${h(p.suggestedSubcategory)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="approvePending('${p.id}')" style="flex:1;background:#4F46E5;color:white;border:none;padding:8px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">
+          ✓ Add as Task
+        </button>
+        <button onclick="dismissPending('${p.id}')" style="flex:1;background:white;color:#6B7280;border:1px solid #E5E7EB;padding:8px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openSlackModal() {
+  const old = document.getElementById('slackModal');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'slackModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;';
+  el.innerHTML = `
+    <div onclick="closeModal('slackModal')" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <div class="modal-scroll" style="position:relative;background:#F9FAFB;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.2);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;">
+      <div style="padding:24px 24px 8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:1.3rem;">💬</span>
+            <div>
+              <h2 style="font-size:15px;font-weight:700;color:#111827;margin:0;">Slack Suggestions</h2>
+              <p style="font-size:12px;color:#6B7280;margin:2px 0 0;">Threads where you haven't replied yet — approve to add as tasks</p>
+            </div>
+          </div>
+          <button onclick="closeModal('slackModal')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;padding:4px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div style="padding:8px 24px 24px;" id="slackPendingList"></div>
+    </div>`;
+  document.body.appendChild(el);
+  renderSlackPendingList(document.getElementById('slackPendingList'));
+}
+
+// ── Jira Pending Tasks ────────────────────────────────────
+function approveJiraPending(id) {
+  const p = state.jiraPendingTasks.find(t => t.id === id);
+  if (!p) return;
+  // Mark as handled so it never reappears after a version bump
+  if (p.sourceUrl && !state.jiraDismissedIds.includes(p.sourceUrl)) {
+    state.jiraDismissedIds.push(p.sourceUrl);
+  }
+  addTask({
+    title:       p.title,
+    status:      'todo',
+    priority:    p.suggestedPriority || 'medium',
+    category:    p.suggestedCategory || '',
+    subcategory: p.suggestedSubcategory || '',
+    notes:       'From Jira — ' + p.sourceFrom + ' on ' + p.issueKey + ' (' + p.sourceDate + ')\n\n' + p.context,
+    attachments: p.sourceUrl ? [{ id: Date.now().toString(36) + Math.random().toString(36).substr(2,4), name: '🎯 Jira: ' + p.issueKey + ' — ' + p.issueSummary, url: p.sourceUrl }] : []
+  });
+  state.jiraPendingTasks = state.jiraPendingTasks.filter(t => t.id !== id);
+  saveState();
+  const badge = document.getElementById('jiraBadge');
+  if (badge) badge.textContent = state.jiraPendingTasks.length;
+  const list = document.getElementById('jiraPendingList');
+  if (list) renderJiraPendingList(list);
+  renderApp();
+}
+
+function dismissJiraPending(id) {
+  const task = state.jiraPendingTasks.find(t => t.id === id);
+  if (task && task.sourceUrl && !state.jiraDismissedIds.includes(task.sourceUrl)) {
+    state.jiraDismissedIds.push(task.sourceUrl);
+  }
+  state.jiraPendingTasks = state.jiraPendingTasks.filter(t => t.id !== id);
+  saveState();
+  const list = document.getElementById('jiraPendingList');
+  if (list) renderJiraPendingList(list);
+  renderApp();
+}
+
+function renderJiraPendingList(container) {
+  const prioColors = { urgent:'#DC2626', high:'#EA580C', medium:'#CA8A04', low:'#16A34A' };
+  if (state.jiraPendingTasks.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:32px 20px 24px;">
+      <div style="font-size:2rem;margin-bottom:10px;">✅</div>
+      <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px;">No pending Jira mentions</div>
+      <div style="font-size:13px;color:#6B7280;line-height:1.6;margin-bottom:20px;">Issues you've already commented on are excluded automatically.<br>The next auto-sync runs at <strong>16:00 CET</strong>.<br>To sync right now, just ask Claude:</div>
+      <div style="background:#F3F4F6;border-radius:10px;padding:12px 16px;font-size:13px;color:#374151;font-style:italic;border:1px solid #E5E7EB;">
+        "Sync Jira into my tasks"
+      </div>
+    </div>`;
+    return;
+  }
+  container.innerHTML = state.jiraPendingTasks.map(p => `
+    <div style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;margin-bottom:12px;background:white;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:6px;line-height:1.4;">${h(p.title)}</div>
+          <div style="font-size:12px;color:#6B7280;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="background:#EFF6FF;color:#1D4ED8;padding:2px 7px;border-radius:4px;font-weight:600;">${h(p.issueKey)}</span>
+            <span style="background:#F3F4F6;padding:2px 7px;border-radius:4px;">from ${h(p.sourceFrom)}</span>
+            <span style="background:#F3F4F6;padding:2px 7px;border-radius:4px;">${h(p.sourceDate)}</span>
+            ${p.suggestedPriority ? `<span style="color:${prioColors[p.suggestedPriority]||'#6B7280'};font-weight:600;">${p.suggestedPriority}</span>` : ''}
+          </div>
+          <div style="font-size:12px;color:#374151;background:#F9FAFB;border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;border:1px solid #F3F4F6;">
+            <div style="font-size:11px;color:#9CA3AF;margin-bottom:3px;">${h(p.issueSummary)}</div>
+            ${h(p.context)}
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="approveJiraPending('${p.id}')" style="flex:1;background:#4F46E5;color:white;border:none;padding:8px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">✓ Add as task</button>
+            <a href="${p.sourceUrl}" target="_blank" style="flex:0;background:white;color:#1D4ED8;border:1px solid #BFDBFE;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:4px;">🎯 View</a>
+            <button onclick="dismissJiraPending('${p.id}')" style="flex:1;background:white;color:#6B7280;border:1px solid #E5E7EB;padding:8px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;">✕ Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openJiraModal() {
+  const old = document.getElementById('jiraModal');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'jiraModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;';
+  el.innerHTML = `
+    <div onclick="closeModal('jiraModal')" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <div class="modal-scroll" style="position:relative;background:#F9FAFB;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.2);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;">
+      <div style="padding:24px 24px 8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:1.3rem;">🎯</span>
+            <div>
+              <h2 style="font-size:15px;font-weight:700;color:#111827;margin:0;">Jira Mentions</h2>
+              <p style="font-size:12px;color:#6B7280;margin:2px 0 0;">Issues where you were tagged — approve to add as tasks</p>
+            </div>
+          </div>
+          <button onclick="closeModal('jiraModal')" style="border:none;background:transparent;cursor:pointer;color:#9CA3AF;padding:4px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div style="padding:8px 24px 24px;" id="jiraPendingList"></div>
+    </div>`;
+  document.body.appendChild(el);
+  renderJiraPendingList(document.getElementById('jiraPendingList'));
+}
+
+// ── File System Save ──────────────────────────────────────
+let _fileHandle = null;
+let _autoSaveTimer = null;
+let _unsaved = false;
+
+// ── IndexedDB: persist file handle across page reloads ────
+function _openHandleDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('anna_tasks_db', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('handles');
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = () => reject();
+  });
+}
+function _storeFileHandle(handle) {
+  _openHandleDB().then(db => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, 'taskFile');
+  }).catch(() => {});
+}
+async function _getStoredHandle() {
+  try {
+    const db = await _openHandleDB();
+    return new Promise(resolve => {
+      const req = db.transaction('handles', 'readonly').objectStore('handles').get('taskFile');
+      req.onsuccess = e => resolve(e.target.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch(e) { return null; }
+}
+// Called on boot — silently restores handle if permission already granted
+async function restoreFileHandle() {
+  if (!('showSaveFilePicker' in window)) return;
+  const handle = await _getStoredHandle();
+  if (!handle) return;
+  try {
+    const perm = await handle.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') { _fileHandle = handle; setSaveStatus('saved'); }
+  } catch(e) {}
+}
+
+function getUpdatedHtml() {
+  const newData = JSON.stringify({
+    version:          state.version,
+    tasks:            state.tasks,
+    categories:       state.categories,
+    pendingTasks:     state.pendingTasks,
+    dismissedIds:     state.dismissedIds,
+    jiraPendingTasks:        state.jiraPendingTasks,
+    jiraDismissedIds:        state.jiraDismissedIds,
+    confluencePendingTasks:  state.confluencePendingTasks,
+    confluenceDismissedIds:  state.confluenceDismissedIds,
+    focusedTaskIds:          state.focusedTaskIds
+  }, null, 2);
+  let src = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  // Replace everything from "const APP_DATA = {" up to "}" immediately before
+  // the END APP DATA marker — greedy match so it always captures the full block
+  src = src.replace(
+    /(const APP_DATA = )\{[\s\S]*\}(;\n\/\/ =+\n\/\/ END APP DATA)/,
+    '$1' + newData + '$2'
+  );
+  return src;
+}
+
+async function saveFile() {
+  if (!('showSaveFilePicker' in window)) { downloadFile(); return; }
+  try {
+    if (!_fileHandle) {
+      // Try to reuse a previously stored handle (asks for permission if needed)
+      const stored = await _getStoredHandle();
+      if (stored) {
+        try {
+          const perm = await stored.requestPermission({ mode: 'readwrite' });
+          if (perm === 'granted') _fileHandle = stored;
+        } catch(e) {}
+      }
+      // If still no handle, show the Save As picker
+      if (!_fileHandle) {
+        _fileHandle = await window.showSaveFilePicker({
+          suggestedName: 'my-tasks.html',
+          types: [{ description: 'Task Manager HTML', accept: { 'text/html': ['.html'] } }]
+        });
+        _storeFileHandle(_fileHandle); // remember it for next time
+      }
+    }
+    const writable = await _fileHandle.createWritable();
+    await writable.write(getUpdatedHtml());
+    await writable.close();
+    _unsaved = false;
+    setSaveStatus('saved');
+    renderBanner();
+  } catch(e) {
+    if (e.name !== 'AbortError') { _fileHandle = null; setSaveStatus('error'); }
+  }
+}
+
+function downloadFile() {
+  const blob = new Blob([getUpdatedHtml()], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'my-tasks.html'; a.click();
+  URL.revokeObjectURL(url);
+  setSaveStatus('saved');
+}
+
+function setSaveStatus(status) {
+  const el = document.getElementById('saveStatusDot');
+  const lb = document.getElementById('saveStatusLabel');
+  if (!el || !lb) return;
+  if (status === 'saved')  { el.style.background='#22C55E'; lb.textContent='Saved'; }
+  if (status === 'unsaved'){ el.style.background='#F59E0B'; lb.textContent='Unsaved'; }
+  if (status === 'error')  { el.style.background='#EF4444'; lb.textContent='Save error'; }
+}
+
+function renderBanner() {
+  const el = document.getElementById('autosave-banner');
+  if (!el) return;
+  if (_fileHandle) {
+    el.innerHTML = '';
+    el.style.display = 'none';
+  } else {
+    el.style.display = 'block';
+    el.innerHTML = `<div onclick="saveFile()" style="background:#FEFCE8;border-bottom:2px solid #FDE68A;padding:11px 20px;text-align:center;cursor:pointer;font-size:13.5px;color:#92400E;display:flex;align-items:center;justify-content:center;gap:8px;user-select:none;" onmouseover="this.style.background='#FEF9C3'" onmouseout="this.style.background='#FEFCE8'">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      <span><strong>Auto-save is off</strong> — click here to link your file and enable auto-save</span>
+    </div>`;
+  }
+}
+
+function scheduleAutoSave() {
+  _unsaved = true;
+  setSaveStatus('unsaved');
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(() => saveFile(), 1200); // always auto-save
+}
+
+// ── Confluence Pending ────────────────────────────────────
+function approveConfluencePending(id) {
+  const p = state.confluencePendingTasks.find(t => t.id === id);
+  if (!p) return;
+  // Mark as handled so it never reappears after a version bump
+  if (p.sourceUrl && !state.confluenceDismissedIds.includes(p.sourceUrl)) {
+    state.confluenceDismissedIds.push(p.sourceUrl);
+  }
+  addTask({
+    title:       p.title,
+    status:      'todo',
+    priority:    p.suggestedPriority || 'medium',
+    category:    p.suggestedCategory || '',
+    subcategory: p.suggestedSubcategory || '',
+    notes:       'From Confluence — ' + p.sourceFrom + ' on "' + p.pageTitle + '" (' + p.sourceDate + ')\n\n' + p.context,
+    attachments: p.sourceUrl ? [{ id: Date.now().toString(36) + Math.random().toString(36).substr(2,4), name: '📄 Confluence: ' + p.pageTitle, url: p.sourceUrl }] : []
+  });
+  state.confluencePendingTasks = state.confluencePendingTasks.filter(t => t.id !== id);
+  saveState();
+  const badge = document.getElementById('confluenceBadge');
+  if (badge) badge.textContent = state.confluencePendingTasks.length;
+  const list = document.getElementById('confluencePendingList');
+  if (list) renderConfluencePendingList(list);
+  renderApp();
+}
+
+function dismissConfluencePending(id) {
+  const task = state.confluencePendingTasks.find(t => t.id === id);
+  if (task && task.sourceUrl && !state.confluenceDismissedIds.includes(task.sourceUrl)) {
+    state.confluenceDismissedIds.push(task.sourceUrl);
+  }
+  state.confluencePendingTasks = state.confluencePendingTasks.filter(t => t.id !== id);
+  saveState();
+  const list = document.getElementById('confluencePendingList');
+  if (list) renderConfluencePendingList(list);
+  renderApp();
+}
+
+function renderConfluencePendingList(container) {
+  const sourceTypeLabel = t => {
+    if (t.sourceType === 'mention_in_page')    return '📝 Mentioned in page';
+    if (t.sourceType === 'mention_in_comment') return '💬 Mentioned in comment';
+    return '💬 Comment on your page';
+  };
+  if (state.confluencePendingTasks.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:32px 16px;color:#9CA3AF;">
+      <div style="font-size:28px;margin-bottom:8px;">📄</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:4px;">No pending Confluence items</div>
+      <div style="font-size:12px;">Mentions on your pages and @-tags are checked automatically.<br>The next auto-sync runs at 16:00 CET.</div>
+    </div>`;
+    return;
+  }
+  container.innerHTML = state.confluencePendingTasks.map(p => `
+    <div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+        <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.4;">${p.title}</div>
+        <span style="font-size:10px;white-space:nowrap;color:#6B7280;background:#F3F4F6;padding:2px 7px;border-radius:999px;">${p.sourceDate}</span>
+      </div>
+      <div style="font-size:11px;color:#6B7280;margin-bottom:4px;">${sourceTypeLabel(p)} · <strong style="color:#374151">${p.sourceFrom}</strong> on <em>${p.pageTitle}</em></div>
+      <div style="font-size:12px;color:#374151;background:#F9FAFB;border-left:3px solid #E5E7EB;padding:6px 10px;border-radius:0 6px 6px 0;margin:8px 0;line-height:1.5;">"${p.context}"</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button onclick="approveConfluencePending('${p.id}')" style="flex:1;background:#4F46E5;color:white;border:none;padding:8px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">✓ Add as task</button>
+        <a href="${p.sourceUrl}" target="_blank" style="flex:0;background:white;color:#4F46E5;border:1px solid #C7D2FE;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;">View</a>
+        <button onclick="dismissConfluencePending('${p.id}')" style="flex:1;background:white;color:#6B7280;border:1px solid #E5E7EB;padding:8px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;">✕ Dismiss</button>
+      </div>
+    </div>`).join('');
+}
+
+function openConfluenceModal() {
+  const overlay = document.createElement('div');
+  overlay.id = 'confluenceModalOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div style="background:white;border-radius:16px;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="padding:20px 20px 16px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h2 style="font-size:16px;font-weight:700;color:#111827;margin:0;">📄 Confluence</h2>
+          <p style="font-size:12px;color:#6B7280;margin:2px 0 0;">Mentions &amp; comments on your pages — approve to add as tasks</p>
+        </div>
+        <button onclick="document.getElementById('confluenceModalOverlay').remove()" style="background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:20px;padding:4px;">✕</button>
+      </div>
+      <div id="confluencePendingList" class="modal-scroll" style="padding:16px;overflow-y:auto;flex:1;"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  renderConfluencePendingList(document.getElementById('confluencePendingList'));
+}
+
+// ── Boot ──────────────────────────────────────────────────
+loadState();
+restoreFileHandle().then(() => { renderApp(); renderBanner(); });
+
+// Warn before closing if there are unsaved changes
+window.addEventListener('beforeunload', e => {
+  if (_unsaved) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved changes. Click Save before closing!';
+  }
+});
+</script>
+</body>
+</html>
