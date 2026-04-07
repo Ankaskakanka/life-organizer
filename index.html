@@ -21,6 +21,10 @@
     .task-dragging    { opacity: 0.4 !important; }
     .drag-handle      { cursor: grab; }
     .drag-handle:active { cursor: grabbing; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    .ind-sidebar-btn:hover { background: #F3F4F6 !important; }
+    .ind-news-card:hover { border-color: #C7D2FE !important; }
+    .ind-chat-suggest:hover { background: #EEF2FF !important; border-color: #C7D2FE !important; }
   </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -33,7 +37,7 @@
 // APP DATA — CLAUDE EDITS THIS SECTION TO UPDATE YOUR TASKS
 // ==========================================================
 const APP_DATA = {
-  version: 18,
+  version: 20,
   tasks: [
     {
       "id": "mnonn0gjdvzb",
@@ -405,6 +409,30 @@ const STATUS_CONFIG = {
   delegate:   { label: 'Delegate',    bg: '#FAF5FF', text: '#7E22CE', border: '#E9D5FF', leftBorder: '#A855F7' }
 };
 
+// ── Industry Intelligence Data ────────────────────────────
+const INDUSTRY_COMPETITORS = [
+  { id:'searchstax', name:'SearchStax', emoji:'🔍', color:'#2563EB', website:'https://www.searchstax.com', docs:'https://www.searchstax.com/docs', hq:'Los Angeles, CA', founded:2012, tier:'mid', tagline:'Managed Solr + AI Search Platform', summary:'SearchStax provides managed Apache Solr cloud solutions and an AI-powered site search product. They compete directly with Cludo in the enterprise site search space, particularly for organisations already using Solr.', dealHistory:'Lost UMB Bank to SearchStax. Competing for SAU (South Australian University). Known strength in US higher education sector.', pricing:'Subscription-based, starting ~$500/mo. Site search priced per queries/month.', euDataStorage:false, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:false},{feature:'EU Data Residency',cludo:true,competitor:false},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:false}], strengths:['Established Solr expertise','Strong in US higher education','Managed infrastructure'], weaknesses:['No conversational AI','No EU data residency','Complex setup'], cludoEdge:'Cludo offers native conversational AI and full EU data residency — critical for European public sector clients.' },
+  { id:'algolia', name:'Algolia', emoji:'⚡', color:'#5468FF', website:'https://www.algolia.com', docs:'https://www.algolia.com/doc', hq:'San Francisco, CA', founded:2012, tier:'enterprise', tagline:'Search & Discovery API Platform', summary:'Algolia is one of the world\'s leading search-as-a-service platforms, known for its speed and developer-friendly API. Widely used by e-commerce, media, and SaaS companies. Recently added AI capabilities including NeuralSearch.', dealHistory:'Lost Navex (£25K ARR) to Algolia. Strong in e-commerce and developer-heavy organisations.', pricing:'Freemium + usage-based. Paid plans from ~$500/mo. Can become very expensive at scale.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:false},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Blazing fast search','Excellent developer experience','Strong e-commerce features','Large ecosystem'], weaknesses:['Expensive at scale','AI inference not EU-based','Developer-heavy (not no-code)','No native conversational AI'], cludoEdge:'Cludo is far simpler to implement (no-code), offers conversational AI chat, and is priced predictably. EU AI inference is a Cludo differentiator.' },
+  { id:'raffle', name:'Raffle', emoji:'🎯', color:'#7C3AED', website:'https://raffle.ai', docs:'https://raffle.ai/docs', hq:'Copenhagen, Denmark', founded:2019, tier:'mid', tagline:'AI Search & Chat for Websites', summary:'Danish AI search startup focused on website search and AI chat. Built on GPT technology. Growing in Scandinavia and Northern Europe. Direct competitor in the SME and public sector space.', dealHistory:'Tænk churned from Cludo to Raffle. Known strength in Danish/Nordic market. GPT-native product.', lostDeals:[{account:'Forbrugerrådet Tænk',arr:'$9,684 ARR',date:'Dec 2025',reason:"Chose Raffle's AI over Cludo. Customer felt Raffle's AI worked better for their use case, and had issues with personalized search (member vs non-member content). Crawler issues during evaluation damaged trust. Raffle's sales team was very convincing."},{account:'Kalundborg Kommune',arr:'$5,111 ARR',date:'Jun 2026',reason:'Website redesign — moved to Raffle as part of the project.'}], pricing:'Starting ~€299/mo. Priced per pages indexed and queries. Simple packaging.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:false},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:false},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:true},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Nordic market presence','GPT-native AI chat','EU data residency','Simple pricing'], weaknesses:['Limited analytics','No faceted search','Small team','Limited enterprise features'], cludoEdge:'Cludo has deeper analytics, stronger enterprise features, and a longer track record. Raffle is simpler but less powerful.' },
+  { id:'wonderchat', name:'Wonderchat', emoji:'💬', color:'#0EA5E9', website:'https://wonderchat.io', docs:'https://wonderchat.io/docs', hq:'Singapore', founded:2023, tier:'smb', tagline:'AI Chatbot Builder on Your Content', summary:'AI chatbot builder that trains on website content and documents. Primarily used as a customer support bot. Competing in the conversational search / AI chat space rather than traditional site search.', dealHistory:'Avisen Legal churned from Cludo to Wonderchat, citing preference for pure AI chat over search. Wins where use case is chat-first.', lostDeals:[{account:'Avisen Legal',arr:'undisclosed',date:'2026',reason:'Wanted a pure AI chat product rather than a search platform. Expectation mismatch on setup complexity. Requested a refund. (Note: Avisen Legal remains Cludo\'s US contract attorney.)'}], pricing:'Freemium. Paid from ~$50/mo. Cheaper than traditional enterprise search.', euDataStorage:false, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:false},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:false},{feature:'Analytics Dashboard',cludo:true,competitor:false},{feature:'Auto-complete / Suggestions',cludo:true,competitor:false},{feature:'Faceted Search',cludo:true,competitor:false},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:true},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Very easy setup','Low price point','Good chat UX','Wide language support'], weaknesses:['Not a search platform','No EU data residency','Limited analytics','Not enterprise-ready'], cludoEdge:'Cludo is a full search + AI platform. Wonderchat is chat-only. Cludo wins on analytics, compliance, and search depth.' },
+  { id:'addsearch', name:'AddSearch', emoji:'🔎', color:'#059669', website:'https://www.addsearch.com', docs:'https://www.addsearch.com/docs', hq:'Helsinki, Finland', founded:2015, tier:'mid', tagline:'Fast Site Search for Websites', summary:'Finnish site search platform focused on speed and simplicity. Known for ease of implementation and clean UI. Primarily targeting marketing websites and mid-market. Less AI-focused than Cludo.', dealHistory:'Occasional mention in Nordic competitive deals. Generally positioned as a cheaper, simpler alternative to Cludo.', pricing:'Starting ~$99/mo. Usage-based pricing. Simpler plans than Cludo.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:false},{feature:'Natural Language Search',cludo:true,competitor:false},{feature:'Conversational AI / Chat',cludo:true,competitor:false},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:true},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Simple setup','EU data residency','Clean analytics','Affordable'], weaknesses:['No AI features','No conversational AI','Limited enterprise support','Smaller team'], cludoEdge:'Cludo has full AI search and conversational capabilities that AddSearch lacks entirely. Cludo is the obvious upgrade path.' },
+  { id:'inbenta', name:'Inbenta', emoji:'🤖', color:'#DC2626', website:'https://www.inbenta.com', docs:'https://developers.inbenta.com', hq:'San Mateo, CA', founded:2010, tier:'enterprise', tagline:'NLP-Powered Search, Chat & Knowledge', summary:'Enterprise NLP platform offering search, chatbot, and knowledge management. Uses proprietary NLP (not GPT). Strong in financial services and customer support. Considered an older-generation AI platform.', dealHistory:'Occasional enterprise competitor. More common in large financial and insurance sector deals.', pricing:'Enterprise pricing, typically >$50K/year. Not self-serve.', euDataStorage:true, euAiInference:true, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:false},{feature:'CMS Integrations',cludo:true,competitor:false},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Full EU compliance (data + AI inference)','Strong NLP heritage','Enterprise-grade','Broad product suite'], weaknesses:['Outdated AI (pre-LLM NLP)','Complex implementation','High cost','Slow innovation'], cludoEdge:'Cludo uses modern LLM AI while Inbenta uses older NLP. Cludo is simpler to implement and faster to ROI.' },
+  { id:'coveo', name:'Coveo', emoji:'🚀', color:'#6366F1', website:'https://www.coveo.com', docs:'https://docs.coveo.com', hq:'Quebec, Canada', founded:2005, tier:'enterprise', tagline:'AI Relevance Platform for Enterprise', summary:'Publicly traded enterprise AI search platform (TSX: CVO). Coveo indexes multiple content sources and applies AI relevance across all. Very strong in Salesforce ecosystem. Competes at the high end of the enterprise market.', dealHistory:'Competes in larger enterprise deals (typically >100K ARR). Not common in Cludo\'s typical mid-market.', pricing:'Enterprise only. Typically $100K+ ARR.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Best-in-class AI relevance','Huge enterprise client base','Salesforce native','Strong analytics'], weaknesses:['Very expensive','Overkill for most Cludo customers','Long implementation','Not no-code'], cludoEdge:'Cludo is 10x cheaper, faster to deploy, and purpose-built for website/public-facing search. Different segments.' },
+  { id:'yext', name:'Yext', emoji:'🗺️', color:'#FF5C35', website:'https://www.yext.com', docs:'https://hitchhikers.yext.com', hq:'New York, NY', founded:2006, tier:'enterprise', tagline:'AI Search for Business (Answers Platform)', summary:'Publicly listed company (NYSE: YEXT). Originally a local business listings platform, now pivoted strongly to AI search. "Yext Answers" targets enterprise and government. Known for structured data / knowledge graph approach.', dealHistory:'Competes in larger enterprise deals, particularly government and large retail. Occasionally mentioned in Cludo deal notes.', pricing:'Enterprise pricing, typically $25K–$200K+ ARR depending on tier.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:false},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Strong brand & marketing','Structured knowledge graph AI','Government/enterprise presence','Good analytics'], weaknesses:['Complex structured data requirements','Expensive','Not CMS-native','Slower to implement'], cludoEdge:'Cludo is faster to implement (hours vs months), works with unstructured content, and is significantly cheaper.' },
+  { id:'glia', name:'Glia', emoji:'🎧', color:'#8B5CF6', website:'https://www.glia.com', docs:'https://docs.glia.com', hq:'New York, NY', founded:2012, tier:'enterprise', tagline:'Customer Service AI for Financial Services', summary:'Glia focuses on digital customer service including AI chat, voice, and video. Very strong in financial services (banks, credit unions, insurance). Competes with Cludo\'s conversational AI offering in the FS vertical.', dealHistory:'Mentioned as AI Chat competitor in Slack deal discussions. More common in financial services sector.', pricing:'Enterprise pricing. Typically bundled as customer service platform.', euDataStorage:false, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:false},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:false},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:false},{feature:'Faceted Search',cludo:true,competitor:false},{feature:'CMS Integrations',cludo:true,competitor:false},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:false}], strengths:['Deep FS vertical expertise','Multi-modal (voice, video, chat)','Strong compliance for banking'], weaknesses:['Not a search platform','No EU data residency','Very expensive','Financial services only'], cludoEdge:'Cludo offers both search AND chat, with EU data residency. Glia is chat-only and FS-specific.' },
+  { id:'squiz', name:'Squiz / Funnelback', emoji:'📚', color:'#0F766E', website:'https://www.squiz.net', docs:'https://docs.squiz.net', hq:'Sydney, Australia', founded:1998, tier:'enterprise', tagline:'DXP with Integrated Enterprise Search', summary:'Squiz is a Digital Experience Platform (DXP) that includes Funnelback as its enterprise search component. Strong in higher education and government in UK, Australia, and New Zealand. Funnelback is a well-established federated search product.', dealHistory:'Competes with Cludo in UK/ANZ higher education and government sector. Funnelback has deep roots in those markets.', pricing:'Enterprise DXP pricing. Often bundled with CMS. Significant implementation costs.', euDataStorage:true, euAiInference:false, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:false},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:true},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:true},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Established higher ed brand','Federated search across many sources','Government compliance','UK/ANZ presence'], weaknesses:['No conversational AI','Complex and expensive','Older tech stack','Long implementations'], cludoEdge:'Cludo is modern, AI-native, and far quicker to implement. Funnelback is legacy tech with no chat capabilities.' },
+  { id:'vertex', name:'Vertex AI Search', emoji:'🔷', color:'#1967D2', website:'https://cloud.google.com/enterprise-search', docs:'https://cloud.google.com/generative-ai-app-builder/docs', hq:'Mountain View, CA (Google)', founded:2023, tier:'enterprise', tagline:'Google-Powered Enterprise AI Search', summary:'Google\'s enterprise AI search product, part of the Vertex AI and Google Cloud ecosystem. Allows organisations to build AI-powered search over their own content using Gemini models. Particularly attractive to existing Google Cloud customers.', dealHistory:'Storebrand (8-year Cludo customer!) churned to Vertex AI Search. Key risk: existing Google Cloud customers may self-build.', lostDeals:[{account:'Storebrand Livsforsikring AS',arr:'$6,784 ARR',date:'Nov 2025',reason:'8-year Cludo customer. SAML SSO stopped working and they were locked out. Instead of waiting for a fix, they switched to Vertex AI Search. Also unhappy about SSO add-on pricing which they felt doubled their annual bill.'}], pricing:'Google Cloud pricing — query-based, ~$2-5/1000 queries. Can escalate quickly at scale.', euDataStorage:true, euAiInference:true, features:[{feature:'AI-Powered Search',cludo:true,competitor:true},{feature:'Natural Language Search',cludo:true,competitor:true},{feature:'Conversational AI / Chat',cludo:true,competitor:true},{feature:'EU Data Residency',cludo:true,competitor:true},{feature:'Analytics Dashboard',cludo:true,competitor:false},{feature:'Auto-complete / Suggestions',cludo:true,competitor:true},{feature:'Faceted Search',cludo:true,competitor:true},{feature:'CMS Integrations',cludo:true,competitor:false},{feature:'No-code Setup',cludo:true,competitor:false},{feature:'Multilingual Support',cludo:true,competitor:true}], strengths:['Google AI quality (Gemini)','EU data + AI inference','Scales infinitely','Google Cloud integration'], weaknesses:['Requires GCP expertise','Complex setup (not no-code)','No CMS integrations','Limited analytics dashboard','Unpredictable costs'], cludoEdge:'Cludo is plug-and-play with no cloud expertise needed, has CMS integrations, predictable pricing, and dedicated search UX.' }
+];
+
+const INDUSTRY_NEWS = [
+  { id:'n001', date:'2026-04-07', competitor:'vertex', competitorName:'Vertex AI Search', type:'feature', title:'Vertex AI Search: Gemini 2.5 Flash default, charts in answers, custom ranking', summary:'Google\'s April release notes bring three updates: Gemini 2.5 Flash is now the default answer model; answers can now include AI-generated charts when queries request data visualisation; and custom ranking is now available, letting teams adjust result order using mathematical expressions on top of model signals.', source:'cloud.google.com/release-notes', sourceUrl:'https://docs.cloud.google.com/generative-ai-app-builder/docs/release-notes', tags:['feature','ai','google'] },
+  { id:'n002', date:'2026-04-07', competitor:'coveo', competitorName:'Coveo', type:'feature', title:'Coveo platform update: query pipeline insights tab and API key revamp', summary:'Coveo\'s April platform release adds a 7-day performance snapshot directly on the Query Pipelines page (CTR, click rank), a cleaner Sort criteria rule panel using dropdown menus, and a fully revamped API key management UI with role-based templates and built-in key rotation tooling.', source:'coveo.com/platform/whats-new', sourceUrl:'https://www.coveo.com/en/platform/whats-new', tags:['feature','platform','ux'] },
+  { id:'n003', date:'2026-03-26', competitor:'coveo', competitorName:'Coveo', type:'pricing', title:'Coveo updates pricing page: plan removed, plan added, pricing unit changed', summary:'PulseSignal detected a change on Coveo\'s public pricing page on March 26. The update involves a plan removal, a new plan addition, and a pricing unit change — suggesting a restructuring of their tier lineup, likely tied to their recent commerce and agentic product expansions.', source:'getpulsesignal.com/changes/coveo', sourceUrl:'https://getpulsesignal.com/changes/coveo', tags:['pricing','restructure'] },
+  { id:'n004', date:'2026-03-23', competitor:'coveo', competitorName:'Coveo', type:'press', title:'Coveo launches Conversational Product Discovery for ecommerce', summary:'New add-on for Coveo for Commerce: shoppers describe what they want in natural language and get curated product results grounded in catalog data — embedded inside the existing search experience, not a separate chatbot. Merchants retain full merchandising control through guardrails and directives. Direct overlap with Cludo\'s conversational AI positioning.', source:'prnewswire.com', sourceUrl:'https://www.prnewswire.com/news-releases/coveo-redefines-ecommerce-discovery-with-search-native-conversational-ai-302720097.html', tags:['press','ecommerce','conversational-ai'] },
+  { id:'n005', date:'2026-03-11', competitor:'algolia', competitorName:'Algolia', type:'feature', title:'Algolia launches fitment-aware search for automotive parts', summary:'Algolia published a blog post and press release introducing an intelligent auto-parts discovery solution with "fitment-aware" search — understanding which parts are compatible with a specific vehicle based on make, model, year and trim. Signals Algolia is pushing deeper into vertical-specific AI search beyond general e-commerce.', source:'algolia.com/blog', sourceUrl:'https://www.algolia.com/blog/product/auto-parts-search', tags:['feature','ecommerce','vertical'] },
+  { id:'n006', date:'2026-03-11', competitor:'wonderchat', competitorName:'Wonderchat', type:'blog', title:'Wonderchat publishes enterprise guide targeting banking, legal and healthcare', summary:'Wonderchat posted "8 Best Enterprise AI Chatbots for Regulated Industries" covering RAG source attribution, SOC 2/GDPR/HIPAA compliance, and on-prem deployment for banking, legal and healthcare sectors. A clear sign they\'re moving upmarket and positioning against enterprise search tools — Cludo territory in public sector and financial services.', source:'wonderchat.io/blog', sourceUrl:'https://wonderchat.io/blog', tags:['blog','enterprise','regulated-industries'] },
+];
+
 // ── State ────────────────────────────────────────────────
 let state = {
   tasks: [],
@@ -419,8 +447,15 @@ let state = {
   filters: { status: 'all', category: 'all', subcategory: 'all', priority: 'all', search: '' },
   expandedNotes: new Set(),
   activeTab: 'work',
+  activeWorkTab: 'todo',
   calendarEvents: [],
-  focusedTaskIds: []
+  focusedTaskIds: [],
+  industrySection: 'competitors',
+  selectedCompetitor: 'searchstax',
+  industryNewsFilter: 'all',
+  industryChatMessages: [],
+  industryApiKey: localStorage.getItem('industry_api_key') || '',
+  industryChatLoading: false
 };
 
 // ── Storage ──────────────────────────────────────────────
@@ -700,6 +735,11 @@ function setTab(tab) {
   renderApp();
 }
 
+function setWorkTab(tab) {
+  state.activeWorkTab = tab;
+  renderApp();
+}
+
 // ── Daily Focus ───────────────────────────────────────────
 function toggleFocusTask(id) {
   if (state.focusedTaskIds.includes(id)) {
@@ -713,6 +753,346 @@ function toggleFocusTask(id) {
 
 function syncCalendar() {
   alert('Calendar sync in progress — Claude will fetch your Outlook events and reload this view.');
+}
+
+// ── Industry Intelligence Functions ───────────────────────
+function setIndustrySection(section) {
+  state.industrySection = section;
+  renderApp();
+}
+
+function setSelectedCompetitor(id) {
+  state.selectedCompetitor = id;
+  renderApp();
+}
+
+// ── Competitor Screenshots ────────────────────────────────
+const SCREENSHOT_SUGGESTIONS = [
+  { label: 'Homepage', hint: 'Their current homepage / hero section' },
+  { label: 'Search UI', hint: 'Live search widget or demo' },
+  { label: 'Analytics dashboard', hint: 'Their analytics or reporting screen' },
+  { label: 'Pricing page', hint: 'Current pricing tiers' },
+  { label: 'Admin console', hint: 'Backend configuration UI' },
+  { label: 'AI / Chat feature', hint: 'Their AI or chat product UI' },
+];
+
+function getCompetitorScreenshots(competitorId) {
+  try { return JSON.parse(localStorage.getItem('comp_screenshots_' + competitorId) || '[]'); } catch(e) { return []; }
+}
+function saveCompetitorScreenshot(competitorId, dataUrl, caption) {
+  const shots = getCompetitorScreenshots(competitorId);
+  shots.push({ dataUrl, caption: caption || '', addedAt: new Date().toISOString().slice(0,10) });
+  localStorage.setItem('comp_screenshots_' + competitorId, JSON.stringify(shots));
+  renderApp();
+}
+function deleteCompetitorScreenshot(competitorId, index) {
+  const shots = getCompetitorScreenshots(competitorId);
+  shots.splice(index, 1);
+  localStorage.setItem('comp_screenshots_' + competitorId, JSON.stringify(shots));
+  renderApp();
+}
+function updateScreenshotCaption(competitorId, index, caption) {
+  const shots = getCompetitorScreenshots(competitorId);
+  if (shots[index]) { shots[index].caption = caption; localStorage.setItem('comp_screenshots_' + competitorId, JSON.stringify(shots)); }
+}
+function triggerScreenshotUpload(competitorId, suggestedCaption) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.multiple = !suggestedCaption;
+  input.onchange = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file, i) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => saveCompetitorScreenshot(competitorId, ev.target.result, i === 0 && suggestedCaption ? suggestedCaption : '');
+      reader.readAsDataURL(file);
+    });
+  };
+  input.click();
+}
+function handleScreenshotDrop(e, competitorId) {
+  e.preventDefault();
+  e.currentTarget.style.borderColor = '#E5E7EB';
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (ev) => saveCompetitorScreenshot(competitorId, ev.target.result, '');
+    reader.readAsDataURL(file);
+  });
+}
+function renderCompetitorScreenshots(c) {
+  const shots = getCompetitorScreenshots(c.id);
+  const coveredLabels = shots.map(s => s.caption);
+  const missing = SCREENSHOT_SUGGESTIONS.filter(s => !coveredLabels.includes(s.label));
+  return `
+  <div style="margin-bottom:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:700;color:#111827;">📸 Product Visuals</div>
+      <button onclick="triggerScreenshotUpload('${c.id}','')" style="padding:5px 12px;background:#4F46E5;color:white;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;">+ Upload</button>
+    </div>
+    ${shots.length > 0 ? `
+    <div
+      ondragover="event.preventDefault();this.style.borderColor='#4F46E5';"
+      ondragleave="this.style.borderColor='#E5E7EB';"
+      ondrop="handleScreenshotDrop(event,'${c.id}')"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:10px;">
+      ${shots.map((s,i) => `
+      <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;background:white;">
+        <img src="${s.dataUrl}" style="width:100%;height:130px;object-fit:cover;display:block;cursor:zoom-in;" onclick="window.open('${s.dataUrl}','_blank')" title="Click to open full size">
+        <div style="padding:7px 10px;background:white;">
+          <input type="text" value="${s.caption.replace(/"/g,'&quot;')}" placeholder="Add a label…" onchange="updateScreenshotCaption('${c.id}',${i},this.value)" style="width:100%;font-size:11px;font-weight:600;color:#374151;border:none;outline:none;background:transparent;box-sizing:border-box;padding:0;">
+          <div style="font-size:10px;color:#9CA3AF;margin-top:1px;">${s.addedAt}</div>
+        </div>
+        <button onclick="deleteCompetitorScreenshot('${c.id}',${i})" style="position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.5);color:white;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+      </div>`).join('')}
+    </div>` : ''}
+    <div
+      ondragover="event.preventDefault();this.style.background='#F5F3FF';this.style.borderColor='#7C3AED';"
+      ondragleave="this.style.background='';this.style.borderColor='#E5E7EB';"
+      ondrop="handleScreenshotDrop(event,'${c.id}')"
+      style="border:2px dashed #E5E7EB;border-radius:10px;padding:14px;background:white;transition:all 0.1s;">
+      <div style="font-size:11px;font-weight:700;color:#9CA3AF;letter-spacing:0.04em;margin-bottom:8px;">SUGGESTED SCREENSHOTS</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${SCREENSHOT_SUGGESTIONS.map(s => {
+          const done = coveredLabels.includes(s.label);
+          return `<button onclick="${done ? '' : `triggerScreenshotUpload('${c.id}','${s.label}')`}" title="${s.hint}" style="padding:5px 10px;border-radius:100px;font-size:11px;font-weight:600;background:${done?'#D1FAE5':'#F9FAFB'};color:${done?'#065F46':'#6B7280'};border:1px solid ${done?'#6EE7B7':'#E5E7EB'};cursor:${done?'default':'pointer'};">${done?'✓ ':''} ${s.label}</button>`;
+        }).join('')}
+      </div>
+      <div style="font-size:11px;color:#9CA3AF;margin-top:10px;text-align:center;">Drop any image here, or click a label above to upload that screenshot</div>
+    </div>
+  </div>`;
+}
+
+function setIndustryNewsFilter(filter) {
+  state.industryNewsFilter = filter;
+  renderApp();
+}
+
+function refreshIndustryNews() {
+  alert('News refresh will run automatically daily via the scheduled shortcut. Manual refresh will search competitor websites and tech news for updates.');
+}
+
+function saveIndustryApiKey() {
+  const input = document.getElementById('industryApiKeyInput');
+  if (input && input.value.trim()) {
+    state.industryApiKey = input.value.trim();
+    localStorage.setItem('industry_api_key', state.industryApiKey);
+    renderApp();
+  }
+}
+
+function clearIndustryChat() {
+  state.industryChatMessages = [];
+  renderApp();
+}
+
+function askSuggestedQuestion(q) {
+  state.industryChatMessages = [];
+  sendIntelligenceChat(q);
+}
+
+async function sendIntelligenceChat(forcedMsg) {
+  const input = document.getElementById('industryChatInput');
+  const msg = forcedMsg || (input ? input.value.trim() : '');
+  if (!msg || state.industryChatLoading) return;
+  if (input) input.value = '';
+  if (!state.industryChatMessages) state.industryChatMessages = [];
+  state.industryChatMessages = [...state.industryChatMessages, { role: 'user', content: msg }];
+  state.industryChatLoading = true;
+  renderApp();
+  const compSummary = INDUSTRY_COMPETITORS.map(c =>
+    c.name + ': ' + c.summary + ' Pricing: ' + c.pricing + '. Deal history: ' + c.dealHistory + '. EU data: ' + (c.euDataStorage ? 'Yes' : 'No') + '. EU AI inference: ' + (c.euAiInference ? 'Yes' : 'No') + '. Cludo edge: ' + c.cludoEdge
+  ).join('\n\n');
+  const recentNews = INDUSTRY_NEWS.slice(0, 6).map(n => n.date + ' — ' + n.title + ': ' + n.summary).join('\n');
+  const systemPrompt = 'You are a competitive intelligence analyst for Cludo, an AI-powered search and conversational AI platform for websites, primarily serving European public sector, higher education, and enterprise clients. Cludo is headquartered in Copenhagen, Denmark. Key Cludo facts: EU data residency and AI inference (strong differentiator), no-code setup, easy CMS integrations, strong analytics, conversational AI/chat search, multilingual.\n\nCOMPETITOR PROFILES:\n' + compSummary + '\n\nRECENT COMPETITIVE INTELLIGENCE:\n' + recentNews + '\n\nAnswer questions concisely and helpfully with actionable insights. Keep responses to 3-4 paragraphs max. Focus on what is most useful for a product manager preparing competitive positioning.';
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': state.industryApiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 800, system: systemPrompt, messages: state.industryChatMessages.map(m => ({ role: m.role, content: m.content })) })
+    });
+    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error((err.error && err.error.message) || 'API error ' + response.status); }
+    const data = await response.json();
+    state.industryChatMessages = [...state.industryChatMessages, { role: 'assistant', content: data.content[0].text }];
+  } catch(err) {
+    state.industryChatMessages = [...state.industryChatMessages, { role: 'assistant', content: '⚠️ Error: ' + err.message + '. Check your API key and try again.' }];
+  }
+  state.industryChatLoading = false;
+  renderApp();
+  setTimeout(() => { const el = document.getElementById('industryChatMessages'); if (el) el.scrollTop = el.scrollHeight; }, 60);
+}
+
+function renderIndustryTab() {
+  const section = state.industrySection || 'competitors';
+  const sections = [{id:'competitors',label:'🏢 Competitors'},{id:'news',label:'📰 News Feed'},{id:'chat',label:'💬 Intelligence Chat'}];
+  return `
+  <div style="background:white;border-bottom:1px solid #E5E7EB;">
+    <div style="max-width:1100px;margin:0 auto;padding:0 20px;">
+      <div style="display:flex;gap:4px;padding:8px 0;">
+        ${sections.map(s => { const a = section===s.id; return '<button onclick="setIndustrySection(\''+s.id+'\')" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;background:'+(a?'#4F46E5':'transparent')+';color:'+(a?'white':'#6B7280')+';border:none;cursor:pointer;transition:all 0.1s;">'+s.label+'</button>'; }).join('')}
+      </div>
+    </div>
+  </div>
+  ${section === 'competitors' ? renderCompetitorSection() : section === 'news' ? renderNewsSection() : renderIntelligenceChatSection()}`;
+}
+
+function renderCompetitorSection() {
+  const competitors = INDUSTRY_COMPETITORS;
+  const selId = state.selectedCompetitor || competitors[0].id;
+  const selected = competitors.find(c => c.id === selId) || competitors[0];
+  return `
+  <div style="display:flex;max-width:1100px;margin:0 auto;padding:0 20px;height:calc(100vh - 200px);gap:0;">
+    <div style="width:210px;min-width:210px;border-right:1px solid #E5E7EB;overflow-y:auto;padding:12px 0;background:white;">
+      ${competitors.map(c => { const isSel = c.id === selId; return '<button class="ind-sidebar-btn" onclick="setSelectedCompetitor(\''+c.id+'\')" style="display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;text-align:left;background:'+(isSel?'#EEF2FF':'transparent')+';border:none;cursor:pointer;border-right:3px solid '+(isSel?'#4F46E5':'transparent')+';">'+'<span style="font-size:1.2rem;">'+c.emoji+'</span><div><div style="font-size:13px;font-weight:600;color:'+(isSel?'#4F46E5':'#111827')+';">'+c.name+'</div><div style="font-size:11px;color:#9CA3AF;">'+(c.tier==='enterprise'?'Enterprise':c.tier==='mid'?'Mid-market':'SMB')+'</div></div></button>'; }).join('')}
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 28px;background:#FAFAFA;">
+      ${renderCompetitorDetail(selected)}
+    </div>
+  </div>`;
+}
+
+function renderCompetitorDetail(c) {
+  const tierMap = { enterprise:{bg:'#FEF3C7',text:'#92400E',label:'Enterprise'}, mid:{bg:'#DBEAFE',text:'#1E40AF',label:'Mid-market'}, smb:{bg:'#D1FAE5',text:'#065F46',label:'SMB'} };
+  const tc = tierMap[c.tier] || tierMap.mid;
+  return `<div style="max-width:760px;">
+    <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;">
+      <div style="width:54px;height:54px;border-radius:12px;background:${c.color}22;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">${c.emoji}</div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:3px;">
+          <h2 style="font-size:21px;font-weight:800;color:#111827;margin:0;">${c.name}</h2>
+          <span style="padding:3px 9px;border-radius:100px;background:${tc.bg};color:${tc.text};font-size:11px;font-weight:700;">${tc.label}</span>
+        </div>
+        <p style="color:#6B7280;font-size:13px;margin:0 0 8px;">${c.tagline}</p>
+        <div style="display:flex;gap:14px;">
+          <a href="${c.website}" target="_blank" style="font-size:12px;color:#4F46E5;text-decoration:none;font-weight:600;">🌐 Website ↗</a>
+          <a href="${c.docs}" target="_blank" style="font-size:12px;color:#4F46E5;text-decoration:none;font-weight:600;">📖 Docs ↗</a>
+        </div>
+      </div>
+      <div style="text-align:right;font-size:12px;color:#9CA3AF;flex-shrink:0;"><div>${c.hq}</div><div>Est. ${c.founded}</div></div>
+    </div>
+    <div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;margin-bottom:14px;"><p style="margin:0;font-size:13px;color:#374151;line-height:1.65;">${c.summary}</p></div>
+    <div style="background:#FFF7ED;border-left:3px solid #F97316;border-radius:4px;padding:12px 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:10px;font-weight:800;color:#EA580C;letter-spacing:0.05em;">⚠️ KNOWN LOST DEALS</div>
+        <span style="font-size:10px;color:#F97316;background:#FEF3C7;padding:2px 7px;border-radius:100px;font-weight:600;">Salesforce sync needed</span>
+      </div>
+      <p style="margin:0 0 8px;font-size:13px;color:#374151;">${c.dealHistory}</p>
+      <div style="background:white;border:1px solid #FED7AA;border-radius:6px;padding:8px 12px;font-size:11px;color:#92400E;">
+        ⚙️ To pull real lost deals automatically, a Salesforce admin needs to give the API user <strong>View All</strong> access on the Opportunity object (Admin → Profiles or Permission Sets → Object Settings → Opportunities → View All Records).
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:800;color:#6B7280;letter-spacing:0.05em;margin-bottom:8px;">💰 PRICING</div>
+        <p style="margin:0;font-size:13px;color:#374151;">${c.pricing}</p>
+      </div>
+      <div style="background:white;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:800;color:#6B7280;letter-spacing:0.05em;margin-bottom:8px;">🇪🇺 EU COMPLIANCE</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="font-size:13px;">${c.euDataStorage?'✅':'❌'} <span style="color:#374151;">EU Data Storage</span></div>
+          <div style="font-size:13px;">${c.euAiInference?'✅':'❌'} <span style="color:#374151;">EU AI Inference</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:8px;">📊 Feature Comparison vs Cludo</div>
+      <div style="border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;background:white;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#F9FAFB;">
+            <th style="padding:9px 14px;text-align:left;font-size:12px;font-weight:600;color:#6B7280;border-bottom:1px solid #E5E7EB;">Feature</th>
+            <th style="padding:9px 14px;text-align:center;font-size:12px;font-weight:700;color:#4F46E5;border-bottom:1px solid #E5E7EB;">Cludo</th>
+            <th style="padding:9px 14px;text-align:center;font-size:12px;font-weight:700;border-bottom:1px solid #E5E7EB;color:${c.color};">${c.name}</th>
+          </tr></thead>
+          <tbody>${c.features.map((f,i) => '<tr style="background:'+(i%2===0?'white':'#FAFAFA')+'"><td style="padding:8px 14px;font-size:13px;color:#374151;border-bottom:1px solid #F3F4F6;">'+f.feature+'</td><td style="padding:8px 14px;text-align:center;border-bottom:1px solid #F3F4F6;">'+(f.cludo?'✅':'❌')+'</td><td style="padding:8px 14px;text-align:center;border-bottom:1px solid #F3F4F6;">'+(f.competitor?'✅':'❌')+'</td></tr>').join('')}</tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:800;color:#15803D;letter-spacing:0.05em;margin-bottom:8px;">✅ THEIR STRENGTHS</div>
+        <ul style="margin:0;padding-left:16px;">${c.strengths.map(s => '<li style="font-size:13px;color:#374151;margin-bottom:3px;">'+s+'</li>').join('')}</ul>
+      </div>
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;">
+        <div style="font-size:10px;font-weight:800;color:#DC2626;letter-spacing:0.05em;margin-bottom:8px;">⚠️ THEIR WEAKNESSES</div>
+        <ul style="margin:0;padding-left:16px;">${c.weaknesses.map(w => '<li style="font-size:13px;color:#374151;margin-bottom:3px;">'+w+'</li>').join('')}</ul>
+      </div>
+    </div>
+    ${renderCompetitorScreenshots(c)}
+    <div style="background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1px solid #C7D2FE;border-radius:10px;padding:14px 16px;">
+      <div style="font-size:10px;font-weight:800;color:#4F46E5;letter-spacing:0.05em;margin-bottom:6px;">🚀 CLUDO'S EDGE</div>
+      <p style="margin:0;font-size:13px;color:#374151;font-weight:500;">${c.cludoEdge}</p>
+    </div>
+  </div>`;
+}
+
+function renderNewsSection() {
+  const news = INDUSTRY_NEWS;
+  const filter = state.industryNewsFilter || 'all';
+  const typeMap = { feature:{bg:'#EFF6FF',text:'#1D4ED8',label:'New Feature',emoji:'🚀'}, blog:{bg:'#F5F3FF',text:'#7C3AED',label:'Blog Post',emoji:'✍️'}, pricing:{bg:'#FFF7ED',text:'#EA580C',label:'Pricing Change',emoji:'💰'}, website:{bg:'#ECFDF5',text:'#059669',label:'Website Update',emoji:'🌐'}, press:{bg:'#FEFCE8',text:'#CA8A04',label:'Press',emoji:'📰'}, funding:{bg:'#F0FDF4',text:'#15803D',label:'Funding',emoji:'💵'} };
+  const typeFilters = [{id:'all',label:'All Updates'},{id:'feature',label:'🚀 New Features'},{id:'blog',label:'✍️ Blog Posts'},{id:'pricing',label:'💰 Pricing'},{id:'website',label:'🌐 Website'},{id:'press',label:'📰 Press'},{id:'funding',label:'💵 Funding'}];
+  const filtered = filter === 'all' ? news : news.filter(n => n.type === filter);
+  return `
+  <div style="max-width:800px;margin:0 auto;padding:24px 20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div><h2 style="font-size:19px;font-weight:800;color:#111827;margin:0 0 2px;">Competitive Intelligence Feed</h2><p style="font-size:13px;color:#9CA3AF;margin:0;">Feature releases, blog posts, pricing changes & website updates from competitors</p></div>
+      <button onclick="refreshIndustryNews()" style="padding:8px 14px;background:#4F46E5;color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">🔄 Refresh</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;">
+      ${typeFilters.map(f => { const a = filter===f.id; return '<button onclick="setIndustryNewsFilter(\''+f.id+'\')" style="padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;background:'+(a?'#4F46E5':'white')+';color:'+(a?'white':'#6B7280')+';border:1px solid '+(a?'#4F46E5':'#E5E7EB')+';cursor:pointer;">'+f.label+'</button>'; }).join('')}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      ${filtered.length === 0 ? '<div style="text-align:center;padding:40px 0;color:#9CA3AF;">No news in this category yet.</div>' : filtered.map(item => {
+        const tc = typeMap[item.type] || typeMap.product;
+        const comp = INDUSTRY_COMPETITORS.find(c => c.id === item.competitor);
+        return '<div class="ind-news-card" style="background:white;border:1px solid #E5E7EB;border-radius:12px;padding:16px 20px;border-left:4px solid '+(comp?comp.color:'#6B7280')+';">'+'<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">'+'<div style="flex:1;">'+'<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">'+'<span style="padding:3px 8px;border-radius:100px;background:'+tc.bg+';color:'+tc.text+';font-size:11px;font-weight:700;">'+tc.emoji+' '+tc.label+'</span>'+'<span style="font-size:12px;color:#9CA3AF;">'+(comp?comp.emoji:'')+' '+item.competitorName+'</span></div>'+'<div style="font-size:14px;font-weight:700;color:#111827;margin-bottom:5px;">'+item.title+'</div>'+'<p style="font-size:13px;color:#6B7280;margin:0 0 7px;line-height:1.5;">'+item.summary+'</p>'+'<div style="font-size:11px;color:#9CA3AF;">'+(item.sourceUrl?'<a href="'+item.sourceUrl+'" target="_blank" style="color:#6B7280;text-decoration:none;">🔗 '+item.source+'</a>':'📍 '+item.source)+'</div>'+'</div>'+'<div style="font-size:12px;color:#9CA3AF;white-space:nowrap;flex-shrink:0;">'+item.date+'</div></div></div>';
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderIntelligenceChatSection() {
+  const messages = state.industryChatMessages || [];
+  const apiKey = state.industryApiKey || '';
+  const loading = state.industryChatLoading || false;
+  const suggestedQs = ['How does Cludo compare to Algolia for enterprise customers?','What are Raffle\'s main weaknesses vs Cludo?','Which competitors offer EU data residency AND EU AI inference?','Why did Storebrand leave Cludo for Vertex AI?','What is Cludo\'s strongest competitive advantage overall?'];
+  return `
+  <div style="display:flex;flex-direction:column;height:calc(100vh - 200px);max-width:760px;margin:0 auto;padding:0 20px;">
+    ${!apiKey ? `
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <div style="background:white;border:1px solid #E5E7EB;border-radius:16px;padding:36px;max-width:420px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+        <div style="font-size:3rem;margin-bottom:14px;">🤖</div>
+        <h3 style="font-size:19px;font-weight:800;color:#111827;margin:0 0 8px;">Intelligence Chat</h3>
+        <p style="font-size:13px;color:#6B7280;margin:0 0 22px;line-height:1.6;">Ask anything about competitors and Cludo's market position. Powered by Claude AI.</p>
+        <input id="industryApiKeyInput" type="password" placeholder="sk-ant-api03-..." style="width:100%;padding:10px 14px;border:1px solid #D1D5DB;border-radius:8px;font-size:13px;box-sizing:border-box;margin-bottom:12px;" onkeydown="if(event.key==='Enter')saveIndustryApiKey()">
+        <button onclick="saveIndustryApiKey()" style="width:100%;padding:11px;background:#4F46E5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Save API Key & Start Chatting</button>
+        <p style="font-size:11px;color:#9CA3AF;margin:12px 0 0;">Stored in localStorage only. Only sent to Anthropic API.</p>
+      </div>
+    </div>
+    ` : `
+    <div style="padding:14px 0;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+      <div><div style="font-size:15px;font-weight:700;color:#111827;">💬 Intelligence Chat</div><div style="font-size:12px;color:#9CA3AF;">Ask anything about competitors and Cludo's positioning</div></div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="state.industryApiKey='';localStorage.removeItem('industry_api_key');renderApp();" style="padding:5px 10px;border:1px solid #E5E7EB;border-radius:6px;font-size:11px;color:#9CA3AF;background:white;cursor:pointer;">Change key</button>
+        <button onclick="clearIndustryChat()" style="padding:5px 10px;border:1px solid #E5E7EB;border-radius:6px;font-size:12px;color:#6B7280;background:white;cursor:pointer;">Clear chat</button>
+      </div>
+    </div>
+    <div id="industryChatMessages" style="flex:1;overflow-y:auto;padding:18px 0;display:flex;flex-direction:column;gap:12px;">
+      ${messages.length === 0 ? `
+      <div style="padding:20px 0;">
+        <p style="font-size:13px;color:#9CA3AF;margin:0 0 14px;text-align:center;">Try asking one of these questions:</p>
+        <div style="display:flex;flex-direction:column;gap:8px;max-width:520px;margin:0 auto;">
+          ${suggestedQs.map(q => '<button class="ind-chat-suggest" data-q="'+q.replace(/"/g,'&quot;')+'" onclick="askSuggestedQuestion(this.getAttribute(\'data-q\'))" style="padding:10px 16px;background:white;border:1px solid #E5E7EB;border-radius:10px;font-size:13px;color:#374151;cursor:pointer;text-align:left;">'+q+'</button>').join('')}
+        </div>
+      </div>
+      ` : messages.map(m => '<div style="display:flex;justify-content:'+(m.role==='user'?'flex-end':'flex-start')+'"><div style="max-width:80%;padding:11px 15px;border-radius:12px;background:'+(m.role==='user'?'#4F46E5':'white')+';border:'+(m.role==='user'?'none':'1px solid #E5E7EB')+';"><p style="margin:0;font-size:13px;color:'+(m.role==='user'?'white':'#374151')+';line-height:1.55;white-space:pre-wrap;">'+m.content+'</p></div></div>').join('')}
+      ${loading ? '<div style="display:flex;justify-content:flex-start;"><div style="padding:12px 16px;border-radius:12px;background:white;border:1px solid #E5E7EB;display:flex;gap:5px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#9CA3AF;animation:bounce 1s infinite;"></div><div style="width:7px;height:7px;border-radius:50%;background:#9CA3AF;animation:bounce 1s infinite 0.15s;"></div><div style="width:7px;height:7px;border-radius:50%;background:#9CA3AF;animation:bounce 1s infinite 0.3s;"></div></div></div>' : ''}
+    </div>
+    <div style="padding:14px 0;border-top:1px solid #E5E7EB;display:flex;gap:10px;">
+      <input id="industryChatInput" type="text" placeholder="Ask about a competitor or Cludo's positioning..." style="flex:1;padding:10px 14px;border:1px solid #D1D5DB;border-radius:10px;font-size:14px;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendIntelligenceChat();}">
+      <button onclick="sendIntelligenceChat()" style="padding:10px 20px;background:${loading?'#9CA3AF':'#4F46E5'};color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;" ${loading?'disabled':''}>Send</button>
+    </div>
+    `}
+  </div>`;
 }
 
 function renderDailyFocus() {
@@ -1221,6 +1601,19 @@ function renderApp() {
     </div>
 
     ${state.activeTab === 'work' ? `
+    <!-- WORK SUB-TABS -->
+    <div style="background:white;border-bottom:1px solid #E5E7EB;">
+      <div style="max-width:900px;" class="mx-auto px-5">
+        <div style="display:flex;gap:0;margin-bottom:-1px;">
+          ${[{id:'todo',label:'📋 To Do List'},{id:'industry',label:'🌐 Industry Updates'},{id:'conversational',label:'💬 Conversational Search'}].map(wt => {
+            const active = state.activeWorkTab === wt.id;
+            return `<button onclick="setWorkTab('${wt.id}')" style="padding:10px 18px;font-size:13px;font-weight:${active?'700':'500'};color:${active?'#4F46E5':'#6B7280'};border:none;background:transparent;cursor:pointer;border-bottom:2px solid ${active?'#4F46E5':'transparent'};" onmouseover="if(!${active})this.style.color='#111827'" onmouseout="if(!${active})this.style.color='#6B7280'">${wt.label}</button>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    ${state.activeWorkTab === 'todo' ? `
     <!-- WORK TOOLBAR -->
     <div style="background:white;border-bottom:1px solid #E5E7EB;">
       <div style="max-width:900px;" class="mx-auto px-5 py-3 flex items-center justify-between gap-4 flex-wrap">
@@ -1309,6 +1702,17 @@ function renderApp() {
     <main style="max-width:900px;" class="mx-auto px-5 py-5">
       ${renderGroupedTasks(tasks)}
     </main>
+    ` : state.activeWorkTab === 'industry' ? `
+    ${renderIndustryTab()}
+    ` : `
+    <main style="max-width:900px;" class="mx-auto px-5 py-5">
+      <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:3rem;margin-bottom:12px;">💬</div>
+        <p style="color:#6B7280;font-size:16px;font-weight:500;">Conversational Search</p>
+        <p style="color:#9CA3AF;font-size:13px;margin-top:4px;">Coming soon — your Conversational Search workspace.</p>
+      </div>
+    </main>
+    `}
     ` : `
     <main style="max-width:900px;" class="mx-auto px-5 py-5">
       <div style="text-align:center;padding:80px 20px;">
