@@ -493,10 +493,19 @@ const APP_DATA = {
   ],
   confluenceDismissedIds: [],
   calendarEvents: [
-    { id: "cal01", title: "private", start: "10:00", end: "10:30", type: "other", location: "" },
-    { id: "cal02", title: "Support / Bug Triage", start: "13:00", end: "14:00", type: "meeting", location: "Microsoft Teams Meeting" }
+    { id: "cal01", title: "Doctor", start: "09:30", end: "10:30", type: "other", location: "" },
+    { id: "cal02", title: "Anna/Fred", start: "10:30", end: "11:00", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal03", title: "Product Development Sync (Bi-Weekly)", start: "10:30", end: "11:30", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal04", title: "Front-dev daily", start: "10:30", end: "11:00", type: "meeting", location: "Google Meet" },
+    { id: "cal05", title: "AI workshop", start: "12:30", end: "13:00", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal06", title: "AI Summary testing sync", start: "13:00", end: "13:30", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal07", title: "Victor : Anna", start: "14:00", end: "15:00", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal08", title: "NA + Product Monthly Meeting", start: "15:00", end: "15:30", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal09", title: "Cludo Town Hall", start: "15:15", end: "15:55", type: "meeting", location: "Microsoft Teams Meeting" },
+    { id: "cal10", title: "Private", start: "16:00", end: "17:00", type: "other", location: "" }
   ],
-  calendarSyncedAt: "2026-04-08T18:32:45+02:00",
+  calendarSyncedAt: "2026-04-09T09:00:00+02:00",
+  industryApiKey: "",
   focusedTaskIds: [],
   dailyNotes: "",
   discoveryProjects: [
@@ -636,7 +645,8 @@ const STATUS_CONFIG = {
   todo:       { label: 'To Do',       bg: '#F3F4F6', text: '#374151', border: '#E5E7EB', leftBorder: '#9CA3AF' },
   inprogress: { label: 'In Progress', bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE', leftBorder: '#3B82F6' },
   done:       { label: 'Done',        bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0', leftBorder: '#22C55E' },
-  delegate:   { label: 'Delegate',    bg: '#FAF5FF', text: '#7E22CE', border: '#E9D5FF', leftBorder: '#A855F7' }
+  delegate:   { label: 'Delegate',    bg: '#FAF5FF', text: '#7E22CE', border: '#E9D5FF', leftBorder: '#A855F7' },
+  onhold:     { label: 'On Hold',     bg: '#FFF7ED', text: '#C2410C', border: '#FED7AA', leftBorder: '#F97316' }
 };
 
 // ── Industry Intelligence Data ────────────────────────────
@@ -702,7 +712,7 @@ let state = {
   activeChatId: null,
   confluencePublishQueue: [],
   dismissedFeedbackRecs: [],
-  industryApiKey: localStorage.getItem('industry_api_key') || '',
+  industryApiKey: APP_DATA.industryApiKey || localStorage.getItem('industry_api_key') || '',
   industryChatLoading: false,
   confluenceSite: localStorage.getItem('confluence_site') || 'cludosearch.atlassian.net',
   confluenceEmail: localStorage.getItem('confluence_email') || '',
@@ -719,172 +729,172 @@ let state = {
     unanswered: 6,
     problems: [
       { theme: 'Multilingual AI Support', severity: 'high', mentions: 14, summary: 'AI Summary and AI Chat produce English responses when queries are in non-English languages (Swedish, Finnish, Danish, Spanish). Works on EU but not US servers. Blocking deals and frustrating live customers.', sources: ['#ask-product', '#ask-support', '#glen-reviews', 'Gong'], items: [
-        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Need Spanish language support for AI Chat on US servers — large Hispanic population.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699999752623' },
-        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary returns English even though the query is in Swedish. Works fine on EU.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699999605102' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish queries get English AI responses. Our users are confused.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699999206851' },
-        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 5', quote: 'Same Finnish language issue — AI Chat defaults to English on every response.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699998763371' },
-        { customer: 'TDC Denmark', source: '#ask-product', date: 'Apr 4', quote: 'Danish queries producing English summaries. Can we get a timeline on multilingual?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699998656985' },
-        { customer: 'Försäkringskassan', source: '#glen-reviews', date: 'Apr 4', quote: 'Reviewed AI and it only answers in English. Non-starter for us.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699998326794' },
+        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Need Spanish language support for AI Chat on US servers — large Hispanic population.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775664606757769?thread_ts=1775664606.757769&cid=C03KQ3Y7JMU' },
+        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary returns English even though the query is in Swedish. Works fine on EU.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish queries get English AI responses. Our users are confused.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774614946258489?thread_ts=1774614946.258489&cid=C03LMPR8200' },
+        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 5', quote: 'Same Finnish language issue — AI Chat defaults to English on every response.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774010261179319?thread_ts=1774010261.179319&cid=C03LMPR8200' },
+        { customer: 'TDC Denmark', source: '#ask-product', date: 'Apr 4', quote: 'Danish queries producing English summaries. Can we get a timeline on multilingual?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775658617309679?thread_ts=1775658617.309679&cid=C03KQ3Y7JMU' },
+        { customer: 'Försäkringskassan', source: '#glen-reviews', date: 'Apr 4', quote: 'Reviewed AI and it only answers in English. Non-starter for us.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' },
         { customer: 'Glen Prospect (ES)', source: 'Gong', date: 'Apr 3', quote: 'Prospect asked about Spanish support mid-demo — had to admit it is not available on US.', link: 'https://app.gong.io/call?id=4252015451' },
-        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 3', quote: 'After reindex, AI summaries switched to English. Previously worked in Swedish.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699997471923' },
-        { customer: 'Telia', source: '#ask-product', date: 'Apr 2', quote: 'Need multilingual AI for our Nordic markets — Swedish, Finnish, Norwegian.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699997043185' },
-        { customer: 'PostNord', source: '#glen-reviews', date: 'Apr 2', quote: 'AI Chat English-only is a dealbreaker for our Scandinavian customers.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699996813819' },
-        { customer: 'Vattenfall', source: '#ask-product', date: 'Apr 1', quote: 'Swedish queries get garbled half-English responses in AI Summary.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699996450758' },
+        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 3', quote: 'After reindex, AI summaries switched to English. Previously worked in Swedish.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'Telia', source: '#ask-product', date: 'Apr 2', quote: 'Need multilingual AI for our Nordic markets — Swedish, Finnish, Norwegian.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' },
+        { customer: 'PostNord', source: '#glen-reviews', date: 'Apr 2', quote: 'AI Chat English-only is a dealbreaker for our Scandinavian customers.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' },
+        { customer: 'Vattenfall', source: '#ask-product', date: 'Apr 1', quote: 'Swedish queries get garbled half-English responses in AI Summary.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' },
         { customer: 'Internal (Sales)', source: 'Gong', date: 'Apr 1', quote: 'Lost deal momentum when prospect realized multilingual AI is EU-only.', link: 'https://app.gong.io/call?id=2404532394' },
-        { customer: 'Skatteverket', source: '#ask-support', date: 'Mar 30', quote: 'Tax queries in Swedish return English AI answers — confusing for citizens.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699995703776' },
-        { customer: 'VR (Finland)', source: '#ask-product', date: 'Mar 28', quote: 'Finnish language AI is essential for our public-facing search.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699995255902' }
+        { customer: 'Skatteverket', source: '#ask-support', date: 'Mar 30', quote: 'Tax queries in Swedish return English AI answers — confusing for citizens.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775562456817999?thread_ts=1775562456.817999&cid=C03LMPR8200' },
+        { customer: 'VR (Finland)', source: '#ask-product', date: 'Mar 28', quote: 'Finnish language AI is essential for our public-facing search.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'AI Accuracy & Hallucinations', severity: 'high', mentions: 11, summary: 'American Airlines documented specific queries returning wrong bag fees across cabin classes. Temple College got inconsistent answers to the same question. Verohallinto gets wrong tax answers depending on word form. NHS Bristol concerned about AI condensing medical content.', sources: ['#ask-product', '#ask-support', 'Zendesk'], items: [
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 7', quote: 'AI returns wrong bag fee for Business class — says $0 but it is $35 on transatlantic.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699994835968' },
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 6', quote: 'Follow-up: wrong fees across 3 cabin classes now documented with screenshots.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699994583713' },
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'AI returns wrong bag fee for Business class — says $0 but it is $35 on transatlantic.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'Follow-up: wrong fees across 3 cabin classes now documented with screenshots.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
         { customer: 'American Airlines', source: 'Zendesk', date: 'Apr 5', quote: 'Ticket #4821: Baggage fee hallucination affecting customer-facing search.', link: 'https://cludohelp.zendesk.com/agent/tickets/4812' },
-        { customer: 'Temple College', source: '#ask-support', date: 'Apr 5', quote: 'Same question asked twice returns different answers each time.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699994129491' },
-        { customer: 'Verohallinto', source: '#ask-support', date: 'Apr 4', quote: 'Tax deadline query gives wrong date depending on whether user types "veroilmoitus" vs "vero ilmoitus".', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699993755457' },
+        { customer: 'Temple College', source: '#ask-support', date: 'Apr 5', quote: 'Same question asked twice returns different answers each time.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775655400913189?thread_ts=1775655400.913189&cid=C03KQ3Y7JMU' },
+        { customer: 'Verohallinto', source: '#ask-support', date: 'Apr 4', quote: 'Tax deadline query gives wrong date depending on whether user types "veroilmoitus" vs "vero ilmoitus".', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774010261179319?thread_ts=1774010261.179319&cid=C03LMPR8200' },
         { customer: 'Verohallinto', source: 'Zendesk', date: 'Apr 3', quote: 'Ticket #4798: Wrong tax answers for compound vs separated Finnish words.', link: 'https://cludohelp.zendesk.com/agent/tickets/4821' },
-        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 3', quote: 'AI is condensing medical dosage info into summaries — risk of omitting critical details.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699993095118' },
-        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Follow-up: need option to disable AI summary for medical content pages.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699992608233' },
-        { customer: 'Luke AI User', source: '#ask-support', date: 'Apr 1', quote: 'AI Mode returns confidently wrong answer about office hours — made up times.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699992438072' },
-        { customer: 'Malmö Stad', source: '#ask-support', date: 'Mar 31', quote: 'AI summary cited a page that does not exist anymore. Classic hallucination.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699992339428' },
-        { customer: 'Internal QA', source: '#ask-product', date: 'Mar 29', quote: 'Documented 5 cases of AI fabricating URLs in summary responses.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699992021946' }
+        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 3', quote: 'AI is condensing medical dosage info into summaries — risk of omitting critical details.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774623989891829?thread_ts=1774623989.891829&cid=C03KQ3Y7JMU' },
+        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Follow-up: need option to disable AI summary for medical content pages.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774623989891829?thread_ts=1774623989.891829&cid=C03KQ3Y7JMU' },
+        { customer: 'Luke AI User', source: '#ask-support', date: 'Apr 1', quote: 'AI Mode returns confidently wrong answer about office hours — made up times.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774614946258489?thread_ts=1774614946.258489&cid=C03LMPR8200' },
+        { customer: 'Malmö Stad', source: '#ask-support', date: 'Mar 31', quote: 'AI summary cited a page that does not exist anymore. Classic hallucination.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'Internal QA', source: '#ask-product', date: 'Mar 29', quote: 'Documented 5 cases of AI fabricating URLs in summary responses.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'Customer Churn Wave', severity: 'high', mentions: 10, summary: '10 cancellations in 30 days totaling ~$84K ARR. Biggest losses: Aeromexico ($27K, 8-year customer), Hi3G Denmark ($17K, 9 years), Visit St. Pete ($13.6K). Common reasons: redesign, CMS switch, competitor. Several gave no reason — potential blind spot.', sources: ['#customer-updates'], items: [
-        { customer: 'Aeromexico', source: '#customer-updates', date: 'Apr 6', quote: 'Cancelled after 8 years. $27K ARR. Switching to competitor — no advance warning.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699991557752' },
-        { customer: 'Hi3G Denmark', source: '#customer-updates', date: 'Apr 4', quote: 'Cancelled — 9 year customer, $17K ARR. CMS switch to built-in search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699991385838' },
-        { customer: 'Visit St. Pete', source: '#customer-updates', date: 'Apr 3', quote: 'Cancelled — $13.6K ARR. Website redesign, going with new platform search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699991270730' },
-        { customer: 'Unknown #1', source: '#customer-updates', date: 'Apr 2', quote: 'Cancellation — no reason given. $8.2K ARR. No recent support tickets.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699991217231' },
-        { customer: 'Unknown #2', source: '#customer-updates', date: 'Apr 1', quote: 'Cancellation — no reason given. $5.1K ARR. Had been quiet for 6 months.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699990908356' },
-        { customer: 'SmallCo EU', source: '#customer-updates', date: 'Mar 31', quote: 'Cancelled — $3.8K ARR. Said too expensive for their usage level.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699990799914' },
-        { customer: 'Regional Gov', source: '#customer-updates', date: 'Mar 29', quote: 'Cancelled — $3.2K ARR. Budget cuts, consolidating vendors.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699990537698' },
-        { customer: 'Retailer Nordic', source: '#customer-updates', date: 'Mar 27', quote: 'Cancelled — $2.9K ARR. Switching to Algolia.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699990379721' },
-        { customer: 'EdTech Startup', source: '#customer-updates', date: 'Mar 25', quote: 'Cancelled — $1.8K ARR. Outgrew our plan, built in-house.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699989880364' },
-        { customer: 'Non-profit UK', source: '#customer-updates', date: 'Mar 23', quote: 'Cancelled — $1.4K ARR. Budget eliminated for search tool.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699989711807' }
+        { customer: 'Aeromexico', source: '#customer-updates', date: 'Apr 6', quote: 'Cancelled after 8 years. $27K ARR. Switching to competitor — no advance warning.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774904691917809' },
+        { customer: 'Hi3G Denmark', source: '#customer-updates', date: 'Apr 4', quote: 'Cancelled — 9 year customer, $17K ARR. CMS switch to built-in search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774615729956579?thread_ts=1774615729.956579&cid=C05TJFXCF0X' },
+        { customer: 'Visit St. Pete', source: '#customer-updates', date: 'Apr 3', quote: 'Cancelled — $13.6K ARR. Website redesign, going with new platform search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774560166401469?thread_ts=1774560166.401469&cid=C05TJFXCF0X' },
+        { customer: 'Unknown #1', source: '#customer-updates', date: 'Apr 2', quote: 'Cancellation — no reason given. $8.2K ARR. No recent support tickets.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'Unknown #2', source: '#customer-updates', date: 'Apr 1', quote: 'Cancellation — no reason given. $5.1K ARR. Had been quiet for 6 months.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'SmallCo EU', source: '#customer-updates', date: 'Mar 31', quote: 'Cancelled — $3.8K ARR. Said too expensive for their usage level.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'Regional Gov', source: '#customer-updates', date: 'Mar 29', quote: 'Cancelled — $3.2K ARR. Budget cuts, consolidating vendors.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'Retailer Nordic', source: '#customer-updates', date: 'Mar 27', quote: 'Cancelled — $2.9K ARR. Switching to Algolia.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'EdTech Startup', source: '#customer-updates', date: 'Mar 25', quote: 'Cancelled — $1.8K ARR. Outgrew our plan, built in-house.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' },
+        { customer: 'Non-profit UK', source: '#customer-updates', date: 'Mar 23', quote: 'Cancelled — $1.4K ARR. Budget eliminated for search tool.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X' }
       ]},
       { theme: 'Crawler Reliability', severity: 'medium', mentions: 9, summary: 'VCU titles broke after a crawler change (SOS-level). Pages dropping from index after reindex (Malmo intranet). Async crawler issues. URL exclusion logic bugs. Date parsing failures. Stale metadata.', sources: ['#ask-support', 'Zendesk', '#ask-product'], items: [
-        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'SOS — All page titles broke after last crawler update. Every result shows wrong title.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699989575314' },
+        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'SOS — All page titles broke after last crawler update. Every result shows wrong title.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1773240927091419?thread_ts=1773240927.091419&cid=C03LMPR8200' },
         { customer: 'VCU', source: 'Zendesk', date: 'Apr 7', quote: 'Ticket #4830: Urgent — title regression across entire index after crawler change.', link: 'https://cludohelp.zendesk.com/agent/tickets/4822' },
-        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Intranet pages dropping from index after scheduled reindex. ~200 pages missing.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699988666150' },
-        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out on large sitemaps. Jobs stuck in queue.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699988174693' },
+        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Intranet pages dropping from index after scheduled reindex. ~200 pages missing.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out on large sitemaps. Jobs stuck in queue.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
         { customer: 'Telia', source: 'Zendesk', date: 'Apr 3', quote: 'Ticket #4812: URL exclusion rules not working — excluded pages still appearing.', link: 'https://cludohelp.zendesk.com/agent/tickets/4779' },
-        { customer: 'Region Stockholm', source: '#ask-product', date: 'Apr 2', quote: 'Date parsing shows "Invalid Date" for pages using Swedish date format.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699987431297' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Apr 1', quote: 'Metadata from 2 months ago still showing in search results despite page updates.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699986939365' },
-        { customer: 'EasyJet', source: '#ask-support', date: 'Mar 30', quote: 'Login-protected pages not being crawled despite auth config being set.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699986752577' },
+        { customer: 'Region Stockholm', source: '#ask-product', date: 'Apr 2', quote: 'Date parsing shows "Invalid Date" for pages using Swedish date format.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775559723133689?thread_ts=1775559723.133689&cid=C03LMPR8200' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Apr 1', quote: 'Metadata from 2 months ago still showing in search results despite page updates.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'EasyJet', source: '#ask-support', date: 'Mar 30', quote: 'Login-protected pages not being crawled despite auth config being set.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775162644450909?thread_ts=1775162644.450909&cid=C03LMPR8200' },
         { customer: 'DNA Oyj', source: 'Zendesk', date: 'Mar 28', quote: 'Ticket #4795: Crawler skipping pages with query parameters in URL.', link: 'https://cludohelp.zendesk.com/agent/tickets/4785' }
       ]},
       { theme: 'Analytics Gaps', severity: 'medium', mentions: 7, summary: 'Explore Minnesota ($9K contract) estimates only $4-5K of value — churn risk. Wants empty searches excluded from dashboard by default and saved geo filters. Others want proactive alerts for 404 spikes, API access to stats, and better referral URL data.', sources: ['#ask-support', '#ask-product-submit-change-request'], items: [
-        { customer: 'Explore Minnesota', source: '#ask-support', date: 'Apr 6', quote: 'We estimate only $4-5K of value from a $9K contract. Need better analytics to justify renewal.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699986009587' },
-        { customer: 'Explore Minnesota', source: '#ask-product-submit-change-request', date: 'Apr 5', quote: 'Change request: exclude empty searches from dashboard by default + saved geo filters.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P/p1775699985593450' },
-        { customer: 'Tower Hamlets', source: '#ask-product-submit-change-request', date: 'Apr 4', quote: 'Want proactive alerts when 404 results spike above threshold.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P/p1775699985190061' },
-        { customer: 'Region Stockholm', source: '#ask-support', date: 'Apr 3', quote: 'Need API access to search stats for our internal reporting system.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699984945218' },
-        { customer: 'NHS Bristol', source: '#ask-product-submit-change-request', date: 'Apr 2', quote: 'Referral URL data is too vague — need full referrer path, not just domain.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P/p1775699984477320' },
-        { customer: 'Vattenfall', source: '#ask-support', date: 'Apr 1', quote: 'Intelligent 404 page could be much better — show search suggestions automatically.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699984186680' },
-        { customer: 'Internal (CS)', source: '#ask-support', date: 'Mar 30', quote: 'Multiple customers asking for same analytics improvements — should prioritize.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699983844935' }
+        { customer: 'Explore Minnesota', source: '#ask-support', date: 'Apr 6', quote: 'We estimate only $4-5K of value from a $9K contract. Need better analytics to justify renewal.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'Explore Minnesota', source: '#ask-product-submit-change-request', date: 'Apr 5', quote: 'Change request: exclude empty searches from dashboard by default + saved geo filters.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'Tower Hamlets', source: '#ask-product-submit-change-request', date: 'Apr 4', quote: 'Want proactive alerts when 404 results spike above threshold.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P' },
+        { customer: 'Region Stockholm', source: '#ask-support', date: 'Apr 3', quote: 'Need API access to search stats for our internal reporting system.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'NHS Bristol', source: '#ask-product-submit-change-request', date: 'Apr 2', quote: 'Referral URL data is too vague — need full referrer path, not just domain.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P' },
+        { customer: 'Vattenfall', source: '#ask-support', date: 'Apr 1', quote: 'Intelligent 404 page could be much better — show search suggestions automatically.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'Internal (CS)', source: '#ask-support', date: 'Mar 30', quote: 'Multiple customers asking for same analytics improvements — should prioritize.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' }
       ]},
       { theme: 'AI Summary in Experience Builder', severity: 'medium', mentions: 6, summary: 'Multiple customers waiting on this. One may downgrade because switching to Rich Inline Template is too expensive. Repeated timeline questions from sales team. Code is merged but testing delayed due to illness.', sources: ['#ask-product', '#ask-support'], items: [
-        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 6', quote: 'When will AI Summary be available in Experience Builder? We need it for our redesign.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699983657730' },
-        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 5', quote: 'May downgrade — switching to Rich Inline Template just to get AI Summary is too expensive.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699983212799' },
-        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 4', quote: 'Third prospect this week asking about AI Summary in EB. Need a timeline to share.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699982835097' },
-        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 3', quote: 'Another deal stalling because we cannot confirm AI Summary in EB date.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699982352643' },
-        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'Code is merged but QA testing delayed due to illness. ETA slipping.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699981996007' },
-        { customer: 'Försäkringskassan', source: '#ask-product', date: 'Mar 31', quote: 'We are evaluating AI Summary but need it in Experience Builder, not standalone.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699981865980' }
+        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 6', quote: 'When will AI Summary be available in Experience Builder? We need it for our redesign.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 5', quote: 'May downgrade — switching to Rich Inline Template just to get AI Summary is too expensive.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 4', quote: 'Third prospect this week asking about AI Summary in EB. Need a timeline to share.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 3', quote: 'Another deal stalling because we cannot confirm AI Summary in EB date.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'Code is merged but QA testing delayed due to illness. ETA slipping.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'Försäkringskassan', source: '#ask-product', date: 'Mar 31', quote: 'We are evaluating AI Summary but need it in Experience Builder, not standalone.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' }
       ]}
     ],
     clusters: [
       { theme: 'Multilingual AI', mentions: 14, customers: 8, sentiment: 'negative', summary: 'Non-English queries getting English AI responses. US servers lack EU multilingual capabilities. Spanish in US specifically requested by Raleigh NC.', sources: ['#ask-product', '#ask-support', '#glen-reviews'], items: [
-        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Spanish language support needed for AI Chat on US servers.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699981730042' },
-        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary returns English for Swedish queries. Works on EU only.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699981357975' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish queries → English AI responses. Users confused.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699981260504' },
-        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 5', quote: 'Same Finnish issue — AI Chat always defaults to English.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699980941599' },
-        { customer: 'TDC Denmark', source: '#ask-product', date: 'Apr 4', quote: 'Danish queries producing English summaries.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699980788097' },
-        { customer: 'Försäkringskassan', source: '#glen-reviews', date: 'Apr 4', quote: 'AI only answers in English — non-starter.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699980507131' }
+        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Spanish language support needed for AI Chat on US servers.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775664606757769?thread_ts=1775664606.757769&cid=C03KQ3Y7JMU' },
+        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary returns English for Swedish queries. Works on EU only.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish queries → English AI responses. Users confused.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774614946258489?thread_ts=1774614946.258489&cid=C03LMPR8200' },
+        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 5', quote: 'Same Finnish issue — AI Chat always defaults to English.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774010261179319?thread_ts=1774010261.179319&cid=C03LMPR8200' },
+        { customer: 'TDC Denmark', source: '#ask-product', date: 'Apr 4', quote: 'Danish queries producing English summaries.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775658617309679?thread_ts=1775658617.309679&cid=C03KQ3Y7JMU' },
+        { customer: 'Försäkringskassan', source: '#glen-reviews', date: 'Apr 4', quote: 'AI only answers in English — non-starter.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' }
       ]},
       { theme: 'AI Accuracy', mentions: 11, customers: 5, sentiment: 'negative', summary: 'Hallucinated content (wrong fees, wrong answers), generic summaries, and inconsistent outputs across sessions.', sources: ['#ask-product', '#ask-support', 'Zendesk'], items: [
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 7', quote: 'Wrong bag fee for Business class — says $0 but should be $35.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699980218879' },
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 6', quote: 'Wrong fees across 3 cabin classes documented with screenshots.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699980144425' },
-        { customer: 'Temple College', source: '#ask-support', date: 'Apr 5', quote: 'Same question returns different answers each time.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699980062108' },
-        { customer: 'Verohallinto', source: '#ask-support', date: 'Apr 4', quote: 'Tax deadline gives wrong date based on word form.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699979831646' },
-        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 3', quote: 'AI condensing medical dosage info — risk of omitting critical details.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699979731833' }
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'Wrong bag fee for Business class — says $0 but should be $35.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'Wrong fees across 3 cabin classes documented with screenshots.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
+        { customer: 'Temple College', source: '#ask-support', date: 'Apr 5', quote: 'Same question returns different answers each time.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775655400913189?thread_ts=1775655400.913189&cid=C03KQ3Y7JMU' },
+        { customer: 'Verohallinto', source: '#ask-support', date: 'Apr 4', quote: 'Tax deadline gives wrong date based on word form.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774010261179319?thread_ts=1774010261.179319&cid=C03LMPR8200' },
+        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 3', quote: 'AI condensing medical dosage info — risk of omitting critical details.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774623989891829?thread_ts=1774623989.891829&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'AI Chat vs AI Mode', mentions: 8, customers: 6, sentiment: 'mixed', summary: 'Confusion about differences between products. Sales team needs clearer positioning. Customers asking for inline AI (not popup). Raleigh NC considering switch from Chat to Mode.', sources: ['#ask-product', '#glen-reviews', 'Gong'], items: [
-        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 6', quote: 'Considering switch from AI Chat to AI Mode — what are the differences?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699979372693' },
+        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 6', quote: 'Considering switch from AI Chat to AI Mode — what are the differences?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775664606757769?thread_ts=1775664606.757769&cid=C03KQ3Y7JMU' },
         { customer: 'Internal (Sales)', source: 'Gong', date: 'Apr 5', quote: 'Prospect confused between Chat and Mode mid-demo. Need clearer positioning.', link: 'https://app.gong.io/call?id=3696641810' },
-        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 4', quote: 'Want inline AI in search results, not a popup chat window.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699978824513' },
-        { customer: 'Glen Prospect', source: '#glen-reviews', date: 'Apr 3', quote: 'Asked for AI Mode demo after seeing Chat — wants the embedded version.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699978608603' },
+        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 4', quote: 'Want inline AI in search results, not a popup chat window.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774980830983329?thread_ts=1774980830.983329&cid=C03KQ3Y7JMU' },
+        { customer: 'Glen Prospect', source: '#glen-reviews', date: 'Apr 3', quote: 'Asked for AI Mode demo after seeing Chat — wants the embedded version.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' },
         { customer: 'Internal (Sales)', source: 'Gong', date: 'Apr 2', quote: 'Another deal where Chat vs Mode confusion slowed the process.', link: 'https://app.gong.io/call?id=3727286291' },
-        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 1', quote: 'Which AI product should we use? Chat or Mode? Need guidance.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699978047878' }
+        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 1', quote: 'Which AI product should we use? Chat or Mode? Need guidance.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774876051543109?thread_ts=1774876051.543109&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'Custom Prompting', mentions: 6, customers: 5, sentiment: 'mixed', summary: 'Available on EU, partially on US. Customers want tone/length control. American Airlines specifically needs brand guidelines in prompts. Not yet self-service in MyCludo.', sources: ['#ask-product', '#glen-reviews'], items: [
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 5', quote: 'Need brand guidelines embedded in AI prompts — tone must match our voice.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699977674976' },
-        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 4', quote: 'Want to control AI response length and tone. Is custom prompting self-service?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699977562342' },
-        { customer: 'Glen Prospect', source: '#glen-reviews', date: 'Apr 3', quote: 'Custom prompting was a big selling point but not available on US?', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699977379057' },
-        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Medical content needs specific prompt guardrails — can we set those?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699977030131' },
-        { customer: 'Vattenfall', source: '#ask-product', date: 'Apr 1', quote: 'When will custom prompting be in MyCludo so we can manage it ourselves?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699976792548' }
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'Need brand guidelines embedded in AI prompts — tone must match our voice.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
+        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 4', quote: 'Want to control AI response length and tone. Is custom prompting self-service?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Glen Prospect', source: '#glen-reviews', date: 'Apr 3', quote: 'Custom prompting was a big selling point but not available on US?', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' },
+        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Medical content needs specific prompt guardrails — can we set those?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774623989891829?thread_ts=1774623989.891829&cid=C03KQ3Y7JMU' },
+        { customer: 'Vattenfall', source: '#ask-product', date: 'Apr 1', quote: 'When will custom prompting be in MyCludo so we can manage it ourselves?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'Crawler Issues', mentions: 9, customers: 7, sentiment: 'negative', summary: 'Title regressions, pages dropping, async failures, login-protected pages, date parsing bugs.', sources: ['#ask-support', 'Zendesk'], items: [
-        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'All page titles broke after crawler update.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699976307186' },
-        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Pages dropping from index after reindex.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699976022144' },
-        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out on large sitemaps.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699975657911' },
+        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'All page titles broke after crawler update.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1773240927091419?thread_ts=1773240927.091419&cid=C03LMPR8200' },
+        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Pages dropping from index after reindex.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out on large sitemaps.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
         { customer: 'Telia', source: 'Zendesk', date: 'Apr 3', quote: 'URL exclusion rules not working.', link: 'https://cludohelp.zendesk.com/agent/tickets/4808' },
-        { customer: 'EasyJet', source: '#ask-support', date: 'Mar 30', quote: 'Login-protected pages not crawled despite auth config.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699975290929' }
+        { customer: 'EasyJet', source: '#ask-support', date: 'Mar 30', quote: 'Login-protected pages not crawled despite auth config.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775162644450909?thread_ts=1775162644.450909&cid=C03LMPR8200' }
       ]},
       { theme: 'Banners & Tooling', mentions: 5, customers: 4, sentiment: 'positive', summary: 'EasyJet and Tower Hamlets excited about banner improvements. Contentful CMS integration question. New editor moving forward with Carla leading.', sources: ['#ask-product', '#ask-support'], items: [
-        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 5', quote: 'Excited about banner improvements — when can we test?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699974983834' },
-        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 4', quote: 'Banner tool is exactly what we need. Looking forward to new editor.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699974868378' },
-        { customer: 'Glen Prospect', source: '#ask-product', date: 'Apr 3', quote: 'Contentful CMS — can banners pull content from our CMS?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699974658597' },
-        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'New banner editor progressing — Carla leading. On track for beta.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699974506227' }
+        { customer: 'EasyJet', source: '#ask-product', date: 'Apr 5', quote: 'Excited about banner improvements — when can we test?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 4', quote: 'Banner tool is exactly what we need. Looking forward to new editor.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Glen Prospect', source: '#ask-product', date: 'Apr 3', quote: 'Contentful CMS — can banners pull content from our CMS?', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'New banner editor progressing — Carla leading. On track for beta.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' }
       ]},
       { theme: 'Analytics & Reporting', mentions: 7, customers: 4, sentiment: 'negative', summary: 'Empty searches polluting dashboards, no proactive alerts, limited API access to stats, Intelligent 404 improvements requested.', sources: ['#ask-support', '#ask-product-submit-change-request'], items: [
-        { customer: 'Explore Minnesota', source: '#ask-support', date: 'Apr 6', quote: 'Empty searches polluting our dashboard data.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699974084347' },
-        { customer: 'Tower Hamlets', source: '#ask-product-submit-change-request', date: 'Apr 4', quote: 'Want proactive alerts for 404 spikes.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P/p1775699974030269' },
-        { customer: 'Region Stockholm', source: '#ask-support', date: 'Apr 3', quote: 'Need API access to search stats.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699973973298' },
-        { customer: 'NHS Bristol', source: '#ask-product-submit-change-request', date: 'Apr 2', quote: 'Referral URL data too vague — need full path.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P/p1775699973811741' }
+        { customer: 'Explore Minnesota', source: '#ask-support', date: 'Apr 6', quote: 'Empty searches polluting our dashboard data.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'Tower Hamlets', source: '#ask-product-submit-change-request', date: 'Apr 4', quote: 'Want proactive alerts for 404 spikes.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P' },
+        { customer: 'Region Stockholm', source: '#ask-support', date: 'Apr 3', quote: 'Need API access to search stats.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775485986928829?thread_ts=1775485986.928829&cid=C03LMPR8200' },
+        { customer: 'NHS Bristol', source: '#ask-product-submit-change-request', date: 'Apr 2', quote: 'Referral URL data too vague — need full path.', link: 'https://cludo-search.slack.com/archives/C04PG491E7P' }
       ]},
       { theme: 'Accessibility / WCAG', mentions: 3, customers: 2, sentiment: 'negative', summary: 'Error message fails contrast checks (affects all sites). Autocomplete not screen-reader accessible. Compliance risk for public sector clients.', sources: ['#ask-product', 'Zendesk'], items: [
-        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 5', quote: 'Error message colour fails WCAG contrast check — affects all our pages.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699973750227' },
+        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 5', quote: 'Error message colour fails WCAG contrast check — affects all our pages.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU' },
         { customer: 'NHS Bristol', source: 'Zendesk', date: 'Apr 3', quote: 'Autocomplete not accessible via screen reader. Compliance issue for us.', link: 'https://cludohelp.zendesk.com/agent/tickets/4821' },
-        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 1', quote: 'Public sector accessibility audit flagged Cludo search widget.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699973136947' }
+        { customer: 'Tower Hamlets', source: '#ask-product', date: 'Apr 1', quote: 'Public sector accessibility audit flagged Cludo search widget.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU' }
       ]},
       { theme: 'Search Relevance (Hybrid)', mentions: 5, customers: 4, sentiment: 'negative', summary: 'Boostings not working correctly on hybrid engines. Old content versions ranking above new. Luke AI Mode cannot find indexed content.', sources: ['#ask-support', '#glen-reviews'], items: [
-        { customer: 'Vattenfall', source: '#ask-support', date: 'Apr 5', quote: 'Boosting rules have no effect on hybrid engine results.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699972848113' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Apr 4', quote: 'Old page versions ranking above newly published content.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699972676785' },
-        { customer: 'Luke AI User', source: '#glen-reviews', date: 'Apr 3', quote: 'AI Mode cannot find content that is clearly in the index.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5/p1775699972455309' },
-        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 2', quote: 'Hybrid search returning irrelevant results for exact match queries.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699972006493' }
+        { customer: 'Vattenfall', source: '#ask-support', date: 'Apr 5', quote: 'Boosting rules have no effect on hybrid engine results.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Apr 4', quote: 'Old page versions ranking above newly published content.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200' },
+        { customer: 'Luke AI User', source: '#glen-reviews', date: 'Apr 3', quote: 'AI Mode cannot find content that is clearly in the index.', link: 'https://cludo-search.slack.com/archives/C09355VQPC5' },
+        { customer: 'DNA Oyj', source: '#ask-support', date: 'Apr 2', quote: 'Hybrid search returning irrelevant results for exact match queries.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200' }
       ]},
       { theme: 'Product Roadmap Visibility', mentions: 5, customers: 3, sentiment: 'mixed', summary: 'Sales team needs screenshots and materials for AI Mode, Ask Cludo, Banners, Homepage. Customers asking where Cludo is headed in next few years.', sources: ['#ask-product', 'Gong'], items: [
-        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 6', quote: 'Need updated screenshots for AI Mode, Ask Cludo, and Banners for decks.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699971526639' },
+        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 6', quote: 'Need updated screenshots for AI Mode, Ask Cludo, and Banners for decks.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773413027911629?thread_ts=1773413027.911629&cid=C03KQ3Y7JMU' },
         { customer: 'Internal (Sales)', source: 'Gong', date: 'Apr 4', quote: 'Enterprise prospect asked "where is Cludo headed in the next 3 years?" — need talking points.', link: 'https://app.gong.io/call?id=9712915334' },
         { customer: 'Glen Prospect', source: 'Gong', date: 'Apr 3', quote: 'Prospect wants to see a public roadmap before committing.', link: 'https://app.gong.io/call?id=7533588129' },
-        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 1', quote: 'Homepage redesign materials needed ASAP for upcoming trade show.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699971199939' }
+        { customer: 'Internal (Sales)', source: '#ask-product', date: 'Apr 1', quote: 'Homepage redesign materials needed ASAP for upcoming trade show.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774876051543109?thread_ts=1774876051.543109&cid=C03KQ3Y7JMU' }
       ]}
     ],
     trending: [
       { theme: 'Multilingual AI', direction: 'up', change: '+6 mentions vs prior period', mentions: 14, items: [
-        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Spanish AI support needed on US servers.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699970703880' },
-        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary English-only for Swedish queries.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699970463854' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish → English AI responses.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699970299878' }
+        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 7', quote: 'Spanish AI support needed on US servers.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775664606757769?thread_ts=1775664606.757769&cid=C03KQ3Y7JMU' },
+        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 6', quote: 'AI Summary English-only for Swedish queries.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774966923560189?thread_ts=1774966923.560189&cid=C03KQ3Y7JMU' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Apr 5', quote: 'Finnish → English AI responses.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774614946258489?thread_ts=1774614946.258489&cid=C03LMPR8200' }
       ]},
       { theme: 'Customer Churn', direction: 'up', change: '10 cancellations (~$84K ARR)', mentions: 10, items: [
-        { customer: 'Aeromexico', source: '#customer-updates', date: 'Apr 6', quote: '$27K ARR lost — 8-year customer, no warning.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699970058201' },
-        { customer: 'Hi3G Denmark', source: '#customer-updates', date: 'Apr 4', quote: '$17K ARR — CMS switch to built-in search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699970007648' },
-        { customer: 'Visit St. Pete', source: '#customer-updates', date: 'Apr 3', quote: '$13.6K ARR — website redesign.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1775699969894677' }
+        { customer: 'Aeromexico', source: '#customer-updates', date: 'Apr 6', quote: '$27K ARR lost — 8-year customer, no warning.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774904691917809' },
+        { customer: 'Hi3G Denmark', source: '#customer-updates', date: 'Apr 4', quote: '$17K ARR — CMS switch to built-in search.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774615729956579?thread_ts=1774615729.956579&cid=C05TJFXCF0X' },
+        { customer: 'Visit St. Pete', source: '#customer-updates', date: 'Apr 3', quote: '$13.6K ARR — website redesign.', link: 'https://cludo-search.slack.com/archives/C05TJFXCF0X/p1774560166401469?thread_ts=1774560166.401469&cid=C05TJFXCF0X' }
       ]},
       { theme: 'AI Mode Interest', direction: 'up', change: '+4 new prospect inquiries', mentions: 8, items: [
         { customer: 'Glen Prospect (EU)', source: 'Gong', date: 'Apr 6', quote: 'Prospect very interested in AI Mode after demo.', link: 'https://app.gong.io/call?id=6053196191' },
-        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 5', quote: 'Evaluating switch from Chat to Mode.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699969184597' },
+        { customer: 'Raleigh NC', source: '#ask-product', date: 'Apr 5', quote: 'Evaluating switch from Chat to Mode.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775664606757769?thread_ts=1775664606.757769&cid=C03KQ3Y7JMU' },
         { customer: 'Internal (Sales)', source: 'Gong', date: 'Apr 4', quote: '4 new AI Mode inquiries this period.', link: 'https://app.gong.io/call?id=4417614631' }
       ]},
       { theme: 'Custom Prompting Demand', direction: 'up', change: '+3 mentions this week', mentions: 6, items: [
-        { customer: 'American Airlines', source: '#ask-product', date: 'Apr 5', quote: 'Brand guidelines needed in AI prompts.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699968589950' },
-        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 4', quote: 'Want self-service prompt customization.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699968191439' },
-        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Medical content needs prompt guardrails.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775699967730753' }
+        { customer: 'American Airlines', source: '#ask-product', date: 'Mar 16', quote: 'Brand guidelines needed in AI prompts.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1773669710488279?thread_ts=1773669710.488279&cid=C03KQ3Y7JMU' },
+        { customer: 'Systembolaget', source: '#ask-product', date: 'Apr 4', quote: 'Want self-service prompt customization.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774517122210039?thread_ts=1774517122.210039&cid=C03KQ3Y7JMU' },
+        { customer: 'NHS Bristol', source: '#ask-product', date: 'Apr 2', quote: 'Medical content needs prompt guardrails.', link: 'https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1774623989891829?thread_ts=1774623989.891829&cid=C03KQ3Y7JMU' }
       ]},
       { theme: 'AI Chat EU Reliability', direction: 'down', change: 'Resolved — Claude Haiku 4.5 live', mentions: 3, items: [
-        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'Claude Haiku 4.5 deployed — EU reliability issues resolved.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699967386707' },
-        { customer: 'S-Group', source: '#ask-support', date: 'Mar 31', quote: 'AI Chat response times back to normal after update.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699967256096' }
+        { customer: 'Internal (Dev)', source: '#ask-support', date: 'Apr 2', quote: 'Claude Haiku 4.5 deployed — EU reliability issues resolved.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200' },
+        { customer: 'S-Group', source: '#ask-support', date: 'Mar 31', quote: 'AI Chat response times back to normal after update.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200' }
       ]},
       { theme: 'Crawler Issues', direction: 'up', change: 'Steady volume, VCU escalation', mentions: 9, items: [
-        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'SOS — titles broke after crawler change.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699967157049' },
-        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Pages dropping from index after reindex.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699967069299' },
-        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1775699966949775' }
+        { customer: 'VCU', source: '#ask-support', date: 'Apr 7', quote: 'SOS — titles broke after crawler change.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1773240927091419?thread_ts=1773240927.091419&cid=C03LMPR8200' },
+        { customer: 'Malmö Stad', source: '#ask-support', date: 'Apr 5', quote: 'Pages dropping from index after reindex.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' },
+        { customer: 'PostNord', source: '#ask-support', date: 'Apr 4', quote: 'Async crawler timing out.', link: 'https://cludo-search.slack.com/archives/C03LMPR8200/p1774963594498249?thread_ts=1774963594.498249&cid=C03LMPR8200' }
       ]}
     ],
     recommendations: [
@@ -1195,7 +1205,7 @@ function renderSubtasks(t) {
 function cycleStatus(id) {
   const t = state.tasks.find(t => t.id === id);
   if (!t) return;
-  const order = ['todo','inprogress','done','delegate'];
+  const order = ['todo','inprogress','onhold','done','delegate'];
   const next = order[(order.indexOf(t.status) + 1) % order.length];
   updateTask(id, { status: next });
 }
@@ -1419,6 +1429,7 @@ function saveIndustryApiKey() {
   if (input && input.value.trim()) {
     state.industryApiKey = input.value.trim();
     localStorage.setItem('industry_api_key', state.industryApiKey);
+    scheduleAutoSave(); // also write to file so key survives cache clears
     renderApp();
   }
 }
@@ -2609,6 +2620,35 @@ async function publishPrdToConfluence(projId) {
   renderApp();
 }
 
+function parsePrdMarkdown(md) {
+  const sectionMap = {
+    'Summary': 'summary',
+    'Problem Statement': 'problemStatement',
+    'Goals & Success Metrics': 'goals',
+    'User Stories': 'userStories',
+    'Functional Requirements': 'requirements',
+    'How It Works': 'howItWorks',
+    'User Flows': 'userFlows',
+    'Acceptance Criteria': 'acceptanceCriteria',
+    'Out of Scope': 'outOfScope',
+    'Technical Notes': 'technicalNotes',
+    'Design Notes': 'designNotes',
+    'Decision Log': 'decisionLog',
+    'Launch Plan': 'launchPlan'
+  };
+  const doc = { title: '' };
+  const parts = md.split(/^## /m);
+  parts.forEach(function(part) {
+    if (!part.trim()) return;
+    const firstNewline = part.indexOf('\n');
+    const heading = firstNewline === -1 ? part.trim() : part.substring(0, firstNewline).trim();
+    const content = firstNewline === -1 ? '' : part.substring(firstNewline + 1).trim();
+    const key = sectionMap[heading];
+    if (key) doc[key] = content;
+  });
+  return doc;
+}
+
 function formatPrdContent(text) {
   if (!text) return '';
   var lines;
@@ -3308,8 +3348,9 @@ function renderProductRequirementsTab() {
   }
 
   function renderDraft(p) {
-    const d = p.document;
+    let d = p.document;
     if (!d) return renderQuestionnaire(p);
+    if (typeof d === 'string') d = parsePrdMarkdown(d);
 
     const sections = [
       { key: 'summary', title: 'Summary' },
@@ -3580,6 +3621,7 @@ function getStats() {
     all: state.tasks.length,
     todo: state.tasks.filter(t=>t.status==='todo').length,
     inprogress: state.tasks.filter(t=>t.status==='inprogress').length,
+    onhold: state.tasks.filter(t=>t.status==='onhold').length,
     done: state.tasks.filter(t=>t.status==='done').length,
     delegate: state.tasks.filter(t=>t.status==='delegate').length
   };
@@ -3744,6 +3786,13 @@ function renderGroupedTasks(tasks) {
     </div>`;
   }
 
+  // Separate on-hold tasks into their own bottom section (unless filtering specifically for them)
+  let onHoldTasks = [];
+  if (state.filters.status !== 'onhold') {
+    onHoldTasks = tasks.filter(t => t.status === 'onhold');
+    tasks = tasks.filter(t => t.status !== 'onhold');
+  }
+
   // Pull focused tasks to top; remove them from their category groups
   const focusedInView = tasks.filter(t => state.focusedTaskIds.includes(t.id));
   tasks = tasks.filter(t => !state.focusedTaskIds.includes(t.id));
@@ -3868,6 +3917,21 @@ function renderGroupedTasks(tasks) {
       </div>`;
   }
 
+  // On Hold section — always at the bottom, separated from active work
+  if (onHoldTasks.length > 0) {
+    html += `
+      <div style="margin-top:12px;margin-bottom:28px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:7px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;">
+          <div style="width:4px;height:22px;background:#F97316;border-radius:999px;flex-shrink:0;"></div>
+          <span style="font-size:12.5px;font-weight:800;color:#C2410C;text-transform:uppercase;letter-spacing:0.07em;">⏸ On Hold</span>
+          <span style="font-size:11px;font-weight:700;color:white;background:#F97316;padding:1px 8px;border-radius:999px;">${onHoldTasks.length}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding-left:10px;border-left:3px solid #FED7AA;margin-left:8px;opacity:0.8;">
+          ${onHoldTasks.map(t => renderCard(t)).join('')}
+        </div>
+      </div>`;
+  }
+
   return html || `<div style="text-align:center;padding:40px;color:#9CA3AF;font-size:14px;">No tasks match your filters</div>`;
 }
 
@@ -3908,6 +3972,7 @@ function renderApp() {
         <div class="flex gap-1.5 flex-wrap items-center">
           ${stats.inprogress>0?`<span style="background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.inprogress} In Progress</span>`:''}
           ${stats.todo>0?`<span style="background:#F3F4F6;color:#374151;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.todo} To Do</span>`:''}
+          ${stats.onhold>0?`<span style="background:#FFF7ED;color:#C2410C;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.onhold} On Hold</span>`:''}
           ${stats.delegate>0?`<span style="background:#FAF5FF;color:#7E22CE;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.delegate} Delegated</span>`:''}
           ${stats.done>0?`<span style="background:#F0FDF4;color:#15803D;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;">${stats.done} Done</span>`:''}
         </div>
@@ -3974,8 +4039,8 @@ function renderApp() {
         </div>
         <!-- Status tabs -->
         <div class="flex gap-1 mt-3">
-          ${['all','todo','inprogress','done','delegate'].map(s => {
-            const labels = {all:'All',todo:'To Do',inprogress:'In Progress',done:'Done',delegate:'Delegate'};
+          ${['all','todo','inprogress','onhold','done','delegate'].map(s => {
+            const labels = {all:'All',todo:'To Do',inprogress:'In Progress',onhold:'On Hold',done:'Done',delegate:'Delegate'};
             const count = stats[s];
             const active = state.filters.status === s;
             return `<button onclick="setFilter('status','${s}')" style="padding:5px 12px;border-radius:999px;border:none;cursor:pointer;font-size:12.5px;font-weight:${active?'600':'500'};background:${active?'#4F46E5':'transparent'};color:${active?'white':'#6B7280'};" ${active?'':'onmouseover="this.style.background=\'#F3F4F6\'" onmouseout="this.style.background=\'transparent\'"'}>
@@ -4192,6 +4257,7 @@ function showTaskModal(task) {
               <select id="f_status" onchange="onModalStatusChange()" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;font-size:13px;color:#374151;background:white;cursor:pointer;">
                 <option value="todo" ${(!task||task.status==='todo')?'selected':''}>To Do</option>
                 <option value="inprogress" ${task?.status==='inprogress'?'selected':''}>In Progress</option>
+                <option value="onhold" ${task?.status==='onhold'?'selected':''}>On Hold</option>
                 <option value="done" ${task?.status==='done'?'selected':''}>Done</option>
                 <option value="delegate" ${task?.status==='delegate'?'selected':''}>Delegate</option>
               </select>
@@ -4807,6 +4873,7 @@ function getUpdatedHtml() {
     focusedTaskIds:          state.focusedTaskIds,
     discoveryProjects:       state.discoveryProjects,
     prdProjects:             state.prdProjects,
+    industryApiKey:          state.industryApiKey || '',
     confluenceUrlsByTitle:   APP_DATA.confluenceUrlsByTitle || {},
     confluencePublishQueue:  state.confluencePublishQueue || []
   }, null, 2);
