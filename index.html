@@ -282,6 +282,7 @@ const APP_DATA = {
       "Customer Help Work"
     ]
   },
+  version: 32,
   pendingTasks: [
     {
       "id": "slack_raleigh_aimode_aisummary",
@@ -378,6 +379,46 @@ const APP_DATA = {
       "sourceDate": "Mar 30, 2026",
       "sourceUrl": "https://cludo-search.slack.com/archives/C0ADPRN1PD5/p1774874157198929",
       "context": "\"I nested the 3 stakeholder pages under the product page — is that a good spot, or is there another area where the latest product validation/thinking/details live?\""
+    },
+    {
+      id: "slack-1775825138",
+      title: "Provide Banner redesign timeline to CSMs",
+      source: "slack",
+      sourceUrl: "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775825138626609",
+      channel: "#ask-product",
+      from: "Jess Palkert",
+      date: "2026-04-10",
+      priority: "medium"
+    },
+    {
+      id: "slack-1775817606",
+      title: "Clarify multilingual AI Chat support status — competitor pressure",
+      source: "slack",
+      sourceUrl: "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775817606525399",
+      channel: "#ask-product",
+      from: "Elsa Hagman",
+      date: "2026-04-10",
+      priority: "high"
+    },
+    {
+      id: "slack-1775760253",
+      title: "Discuss custom prompting for US clients at product meeting (New York Tech)",
+      source: "slack",
+      sourceUrl: "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775760253033779",
+      channel: "#ask-product",
+      from: "Sara Kelzer",
+      date: "2026-04-09",
+      priority: "medium"
+    },
+    {
+      id: "slack-1775759590",
+      title: "Banners ETA for New York Tech",
+      source: "slack",
+      sourceUrl: "https://cludo-search.slack.com/archives/C03KQ3Y7JMU/p1775759590391109",
+      channel: "#ask-product",
+      from: "Sara Kelzer",
+      date: "2026-04-09",
+      priority: "medium"
     }
   ],
   dismissedIds: [],
@@ -497,18 +538,57 @@ const APP_DATA = {
   ],
   confluenceDismissedIds: [],
   calendarEvents: [
-    { id: "cal01", title: "Doctor", start: "09:30", end: "10:30", type: "other", location: "" },
-    { id: "cal02", title: "Anna/Fred", start: "10:30", end: "11:00", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal03", title: "Product Development Sync (Bi-Weekly)", start: "10:30", end: "11:30", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal04", title: "Front-dev daily", start: "10:30", end: "11:00", type: "meeting", location: "Google Meet" },
-    { id: "cal05", title: "AI workshop", start: "12:30", end: "13:00", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal06", title: "AI Summary testing sync", start: "13:00", end: "13:30", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal07", title: "Victor : Anna", start: "14:00", end: "15:00", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal08", title: "NA + Product Monthly Meeting", start: "15:00", end: "15:30", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal09", title: "Cludo Town Hall", start: "15:15", end: "15:55", type: "meeting", location: "Microsoft Teams Meeting" },
-    { id: "cal10", title: "Private", start: "16:00", end: "17:00", type: "other", location: "" }
+    { date: "2026-04-10", start: "09:30", end: "11:00", title: "Private", with: "", location: "", type: "focus" },
+  { date: "2026-04-10", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-10", start: "13:00", end: "13:30", title: "Write Product update to channel", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-10", start: "13:00", end: "14:00", title: "Support, Dev & Product Triage Sync", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-10", start: "14:00", end: "15:00", title: "Canceled: Anna / Andrew", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-13", start: "10:00", end: "11:00", title: "Weekly projects review", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-13", start: "12:30", end: "13:30", title: "Platform team bi-weekly sprint planning", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-13", start: "12:30", end: "13:00", title: "Team Platform GeoGuessr 🌎", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-13", start: "13:30", end: "14:00", title: "Canceled: Front-dev weekly planning", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-13", start: "13:30", end: "14:00", title: "Front-dev weekly", with: "", location: "https://meet.google.com/xuz-qszx-kza", type: "other" },
+  { date: "2026-04-13", start: "14:30", end: "16:00", title: "Busy", with: "", location: "", type: "other" },
+  { date: "2026-04-14", start: "10:00", end: "10:30", title: "Regular postmortem review slot", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-14", start: "10:30", end: "11:30", title: "Product Development Sync (Bi-Weekly)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-14", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-14", start: "12:30", end: "13:00", title: "Team Platform GeoGuessr 🌎", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-14", start: "13:00", end: "14:00", title: "Canceled: 1:1 David & Anna", with: "", location: ":trophy: 🏆", type: "other" },
+  { date: "2026-04-14", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-15", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-16", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-16", start: "12:30", end: "13:00", title: "AI workshop", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-16", start: "13:00", end: "13:45", title: "Product updates for customer email + Ask Cludo plan", with: "", location: ":trophy: 🏆", type: "other" },
+  { date: "2026-04-16", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-17", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-20", start: "10:00", end: "11:00", title: "Weekly projects review", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-20", start: "12:30", end: "13:00", title: "Team Platform GeoGuessr 🌎", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-20", start: "13:30", end: "14:00", title: "Canceled: Front-dev weekly planning", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-20", start: "13:30", end: "14:00", title: "Front-dev weekly", with: "", location: "https://meet.google.com/xuz-qszx-kza", type: "other" },
+  { date: "2026-04-20", start: "14:00", end: "15:00", title: "Essi: Anna", with: "", location: ":trophy: 🏆", type: "other" },
+  { date: "2026-04-20", start: "14:30", end: "16:00", title: "Busy", with: "", location: "", type: "other" },
+  { date: "2026-04-21", start: "10:00", end: "10:30", title: "Regular postmortem review slot", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-21", start: "10:30", end: "11:30", title: "Product Development Sync (Bi-Weekly)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-21", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-21", start: "12:30", end: "13:00", title: "Team Platform GeoGuessr 🌎", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-21", start: "14:30", end: "15:30", title: "Cludo iterations", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-21", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-21", start: "18:15", end: "18:45", title: "Canceled: Front-End Team Meeting", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-22", start: "13:00", end: "14:00", title: "Support / Bug Triage", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-22", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-23", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-23", start: "12:30", end: "13:30", title: "Team retrospective monthly", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-23", start: "12:30", end: "13:00", title: "AI workshop", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-23", start: "13:00", end: "13:30", title: "Anna : Carla ", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-23", start: "16:00", end: "16:15", title: "Canceled: Blue team: daily meeting (all)", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-24", start: "10:30", end: "11:00", title: "Front-dev daily", with: "", location: "https://meet.google.com/xez-vwnk-zro", type: "other" },
+  { date: "2026-04-24", start: "13:00", end: "13:30", title: "Write Product update to channel", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-24", start: "13:00", end: "14:00", title: "Support, Dev & Product Triage Sync", with: "", location: "Microsoft Teams Meeting", type: "other" },
+  { date: "2026-04-24", start: "14:00", end: "21:00", title: "Office outing! Cludo goes to Bakken 🎢💜", with: "", location: "Bakken", type: "other" },
+  { date: "2026-04-24", start: "17:00", end: "23:00", title: "Cludo Food Club👨‍🍳", with: "", location: "", type: "other" },
+  { date: "2026-04-25", start: "00:00", end: "00:00", title: "Cludo's birthday 🎂", with: "", location: "", type: "other" }
   ],
-  calendarSyncedAt: "2026-04-09T09:00:00+02:00",
+  calendarSyncedAt: "2026-04-10T14:30:00Z",
   industryApiKey: "",
   focusedTaskIds: [],
   dailyNotes: "",
@@ -3463,7 +3543,9 @@ function renderDailyFocus() {
     other:    { bg: '#F8FAFC', border: '#94A3B8', text: '#475569'  }
   };
 
-  const calEvents   = state.calendarEvents || [];
+  const allCalEvents = state.calendarEvents || [];
+  const todayISO = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  const calEvents = allCalEvents.filter(ev => ev.date === todayISO);
   const focusTasks  = state.focusedTaskIds.map(id => state.tasks.find(t => t.id === id)).filter(Boolean);
   const available   = state.tasks.filter(t => t.status !== 'done' && !state.focusedTaskIds.includes(t.id));
 
@@ -3497,8 +3579,8 @@ function renderDailyFocus() {
           <div style="padding:6px 12px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11.5px;font-weight:600;color:#374151;">🗓 Calendar</span>
             ${calEvents.length === 0
-              ? `<span style="font-size:10px;color:#9CA3AF;">No events — click Sync Outlook</span>`
-              : `<span style="font-size:10px;color:#6366F1;background:#EEF2FF;padding:1px 6px;border-radius:4px;">${calEvents.length} events</span>`}
+              ? `<span style="font-size:10px;color:#9CA3AF;">No events today</span>`
+              : `<span style="font-size:10px;color:#6366F1;background:#EEF2FF;padding:1px 6px;border-radius:4px;">${calEvents.length} today</span>`}
           </div>
           <!-- Time grid -->
           <div style="position:relative;">
